@@ -332,64 +332,56 @@
   </footer>
 
   <script>
-    // ✏️  НАСТРОЙКИ — замени на свои значения
-    const TG_TOKEN  = '8943280869:AAHFxKGh5R-jYh0OJot5xOoPp_nbt7E04pk';   // токен от @BotFather
-    const TG_CHAT_ID = '7114829971';   // твой личный chat_id
+const TG_TOKEN  = '8943280869:AAHFxKGh5R-jYh0OJot5xOoPp_nbt7E04pk';
+const TG_CHAT_ID = '7114829971';
 
-    const botTypes = {
-      'Бот для канала': 'Бот для канала',
-      'Бот поддержки':  'Бот поддержки',
-      'Бот записи':     'Бот записи',
-      'Бот-магазин':    'Бот-магазин',
-    };
+document.getElementById('briefForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const btn  = document.getElementById('submitBtn');
+  const err  = document.getElementById('formErr');
+  const form = e.target;
 
-    document.getElementById('briefForm').onsubmit = async (e) => {
-      e.preventDefault();
-      const btn  = document.getElementById('submitBtn');
-      const err  = document.getElementById('formErr');
-      const form = e.target;
+  const kind    = document.getElementById('kind').value;
+  const task    = document.getElementById('task').value.trim();
+  const contact = document.getElementById('contact').value.trim();
 
-      const kind    = document.getElementById('kind').value;
-      const task    = document.getElementById('task').value.trim();
-      const contact = document.getElementById('contact').value.trim();
+  const text =
+    `🔔 *Новая заявка с сайта ATELIER*\n\n` +
+    `📌 *Тип бота:* ${kind}\n` +
+    `💬 *Задача:* ${task}\n` +
+    `📱 *Telegram клиента:* ${contact}`;
 
-      const text =
-        `🔔 *Новая заявка с сайта ATELIER*\n\n` +
-        `📌 *Тип бота:* ${kind}\n` +
-        `💬 *Задача:* ${task}\n` +
-        `📱 *Telegram клиента:* ${contact}`;
+  btn.disabled = true;
+  btn.textContent = 'Отправляем…';
+  err.classList.remove('show');
 
-      btn.disabled = true;
-      btn.textContent = 'Отправляем…';
-      err.classList.remove('show');
-
-      try {
-        const res = await fetch(
-          `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              chat_id:    TG_CHAT_ID,
-              text:       text,
-              parse_mode: 'Markdown',
-            }),
-          }
-        );
-        const data = await res.json();
-        if (data.ok) {
-          form.style.display = 'none';
-          document.getElementById('ok').classList.add('show');
-        } else {
-          throw new Error(data.description || 'Telegram API error');
-        }
-      } catch (ex) {
-        console.error(ex);
-        btn.disabled = false;
-        btn.textContent = 'Получить оценку';
-        err.classList.add('show');
+  try {
+    const res = await fetch(
+      `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id:    TG_CHAT_ID,
+          text:       text,
+          parse_mode: 'Markdown',
+        }),
       }
-    };
-  </script>
+    );
+    const data = await res.json();
+    if (data.ok) {
+      form.style.display = 'none';
+      document.getElementById('ok').classList.add('show');
+    } else {
+      throw new Error(data.description || 'Telegram API error');
+    }
+  } catch (ex) {
+    console.error(ex);
+    btn.disabled = false;
+    btn.textContent = 'Получить оценку';
+    err.classList.add('show');
+  }
+};
+</script>
 </body>
 </html>
