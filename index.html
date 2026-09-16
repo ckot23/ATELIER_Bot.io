@@ -331,8 +331,8 @@
     </div>
   </footer>
 
-  <script>
-const TG_TOKEN  = '8943280869:AAHFxKGh5R-jYh0OJot5xOoPp_nbt7E04pk';
+ <script>
+const TG_TOKEN   = '8943280869:AAHFxKGh5R-jYh0OJot5xOoPp_nbt7E04pk';
 const TG_CHAT_ID = '7114829971';
 
 document.getElementById('briefForm').onsubmit = async (e) => {
@@ -346,10 +346,10 @@ document.getElementById('briefForm').onsubmit = async (e) => {
   const contact = document.getElementById('contact').value.trim();
 
   const text =
-    `🔔 *Новая заявка с сайта ATELIER*\n\n` +
-    `📌 *Тип бота:* ${kind}\n` +
-    `💬 *Задача:* ${task}\n` +
-    `📱 *Telegram клиента:* ${contact}`;
+    '\uD83D\uDD14 *Новая заявка с сайта ATELIER*\n\n' +
+    '\uD83D\uDCCC *Тип бота:* ' + kind + '\n' +
+    '\uD83D\uDCAC *Задача:* ' + task + '\n' +
+    '\uD83D\uDCF1 *Telegram клиента:* ' + contact;
 
   btn.disabled = true;
   btn.textContent = 'Отправляем…';
@@ -357,7 +357,7 @@ document.getElementById('briefForm').onsubmit = async (e) => {
 
   try {
     const res = await fetch(
-      `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,
+      'https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage',
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
