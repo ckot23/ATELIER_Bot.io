@@ -5,10 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ATELIER — Оставить заявку</title>
 <style>
-:root{--text:#f7f1ea;--muted:rgba(247,241,234,.66);--accent:#e8893a;--accent-2:#ffb067;--ink:#1a120c;--line:rgba(255,196,140,.18);--surface:rgba(20,16,12,.72);--max:600px}
+:root{--text:#f7f1ea;--muted:rgba(247,241,234,.66);--accent:#e8893a;--accent-2:#ffb067;--ink:#1a120c;--line:rgba(255,196,140,.18);--surface:rgba(20,16,12,.72);--max:640px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{color:var(--text);font:16px/1.65 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#070706;min-height:100vh;display:flex;flex-direction:column}
 .bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(80% 60% at 20% 30%,rgba(232,137,58,.25),transparent 60%),linear-gradient(180deg,#070706,#140f0c)}
+.orb{position:fixed;border-radius:50%;filter:blur(48px);pointer-events:none;z-index:-1;mix-blend-mode:screen}
+.orb.a{width:280px;height:280px;background:rgba(255,176,103,.18);left:-90px;top:18%;animation:float 9s ease-in-out infinite}
+.orb.b{width:320px;height:320px;background:rgba(196,92,34,.25);right:-110px;top:8%;animation:float 11s ease-in-out infinite reverse}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-22px)}}
 header{backdrop-filter:blur(16px);background:rgba(7,7,6,.8);border-bottom:1px solid var(--line)}
 .top{display:flex;align-items:center;gap:12px;padding:13px 24px;max-width:var(--max);margin:0 auto}
 .mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(150deg,#ffb067,#e8893a);color:var(--ink);display:grid;place-items:center;font-weight:800;font-size:15px}
@@ -16,23 +20,82 @@ header{backdrop-filter:blur(16px);background:rgba(7,7,6,.8);border-bottom:1px so
 .brand-text span{font-size:11px;color:var(--muted)}
 .back{margin-left:auto;font-size:13px;color:var(--muted);padding:6px 12px;border-radius:8px;border:1px solid var(--line);text-decoration:none;transition:color .15s}
 .back:hover{color:var(--text)}
-.wrap{flex:1;width:min(100% - 32px,var(--max));margin:0 auto;padding:40px 0 60px}
-h1{font-size:28px;margin-bottom:8px}
-.lead{color:var(--muted);font-size:15px;margin-bottom:32px}
-.form-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:28px;backdrop-filter:blur(14px)}
-label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;margin-top:18px}
-label:first-child{margin-top:0}
-input,textarea,select{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:12px 14px;color:var(--text);font:15px/1.5 inherit;outline:none;transition:border-color .15s}
-input:focus,textarea:focus,select:focus{border-color:rgba(255,176,103,.5)}
-select option{background:#1a120c}
-textarea{resize:vertical;min-height:90px}
-.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:50px;border-radius:12px;font-weight:700;font-size:16px;border:0;cursor:pointer;margin-top:22px;background:linear-gradient(175deg,#ffb067,#e8893a);color:var(--ink);transition:transform .18s,box-shadow .18s;text-decoration:none}
-.btn:hover{transform:scale(1.03);box-shadow:0 8px 28px rgba(196,92,34,.4)}
-.note{font-size:12px;color:var(--muted);text-align:center;margin-top:14px}
+.wrap{flex:1;width:min(100% - 32px,var(--max));margin:0 auto;padding:36px 0 60px}
+h1{font-size:clamp(24px,4vw,30px);margin-bottom:8px}
+.lead{color:var(--muted);font-size:15px;margin-bottom:26px}
+
+/* PROGRESS */
+.progress{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.p-steps{display:flex;gap:8px;flex:1}
+.p-dot{height:6px;flex:1;border-radius:6px;background:rgba(255,196,140,.12);overflow:hidden;position:relative}
+.p-dot i{position:absolute;inset:0;background:linear-gradient(90deg,#ffb067,#e8893a);border-radius:6px;transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.6,.1,.2,1)}
+.p-dot.on i{transform:scaleX(1)}
+.p-label{font-size:12px;color:var(--muted);white-space:nowrap}
+.p-label b{color:var(--accent-2)}
+
+/* CARD + PANELS */
+.form-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:26px;backdrop-filter:blur(14px);position:relative;overflow:hidden}
+.step{display:none;animation:slideIn .38s cubic-bezier(.4,.1,.2,1)}
+.step.active{display:block}
+@keyframes slideIn{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
+.q{font-size:19px;font-weight:700;margin-bottom:4px}
+.q-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+
+/* TYPE OPTIONS */
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:rgba(255,255,255,.04);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;color:var(--text);cursor:pointer;transition:border-color .18s,background .18s,transform .18s;font-family:inherit}
+.opt:hover{border-color:rgba(255,176,103,.45);transform:translateY(-1px)}
+.opt.sel{border-color:var(--accent);background:rgba(232,137,58,.12);box-shadow:0 0 0 3px rgba(232,137,58,.15)}
+.opt .emo{font-size:24px;width:44px;height:44px;border-radius:12px;background:rgba(255,176,103,.1);display:grid;place-items:center;flex-shrink:0}
+.opt .opt-t b{display:block;font-size:15px}
+.opt .opt-t span{font-size:12.5px;color:var(--muted)}
+.opt .check{margin-left:auto;width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,196,140,.25);flex-shrink:0;display:grid;place-items:center;font-size:13px;color:transparent;transition:all .18s}
+.opt.sel .check{background:linear-gradient(135deg,#ffb067,#e8893a);border-color:transparent;color:var(--ink);font-weight:800}
+
+/* DETAILS */
+textarea,input{width:100%;background:rgba(10,9,8,.85);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--text);font:15px/1.5 inherit;outline:none;transition:border-color .15s,box-shadow .15s}
+textarea{resize:vertical;min-height:96px}
+input:focus,textarea:focus{border-color:rgba(255,176,103,.55);box-shadow:0 0 0 3px rgba(232,137,58,.12)}
+label{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+label:first-of-type{margin-top:0}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.chip{font-size:12.5px;background:rgba(255,176,103,.08);border:1px solid rgba(255,176,103,.22);color:var(--accent-2);padding:5px 12px;border-radius:20px;cursor:pointer;transition:background .15s;user-select:none}
+.chip:hover{background:rgba(255,176,103,.18)}
+.bud-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bud{background:rgba(255,255,255,.04);border:1.5px solid var(--line);border-radius:12px;padding:11px 8px;font-size:13.5px;text-align:center;color:var(--muted);cursor:pointer;transition:all .18s;font-family:inherit}
+.bud:hover{border-color:rgba(255,176,103,.45);color:var(--text)}
+.bud.sel{border-color:var(--accent);background:rgba(232,137,58,.12);color:var(--text);box-shadow:0 0 0 3px rgba(232,137,58,.15)}
+
+/* NAV BUTTONS */
+.btn-row{display:flex;gap:10px;margin-top:24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 24px;border-radius:12px;font-weight:700;font-size:15px;border:0;cursor:pointer;transition:transform .18s,box-shadow .18s,opacity .18s;text-decoration:none;font-family:inherit}
+.btn.primary{background:linear-gradient(175deg,#ffb067,#e8893a);color:var(--ink);flex:1}
+.btn.primary:hover{transform:scale(1.02);box-shadow:0 8px 26px rgba(196,92,34,.4)}
+.btn.primary:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--text)}
+.btn.ghost:hover{border-color:rgba(255,176,103,.5)}
+.err{color:#ff8f6b;font-size:13px;margin-top:8px;display:none}
+.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* RESULT */
+.done-icon{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#ffb067,#e8893a);display:grid;place-items:center;font-size:30px;margin:4px auto 14px;animation:pop .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.done h2{text-align:center;font-size:21px;margin-bottom:4px}
+.done .q-sub{text-align:center;margin-bottom:18px}
+.msg-preview{background:#182028;border-radius:16px 16px 16px 5px;padding:16px 18px;font-size:14px;line-height:1.55;white-space:pre-wrap;box-shadow:0 10px 28px rgba(0,0,0,.35);position:relative}
+.msg-preview .mp-time{display:block;text-align:right;font-size:11px;color:rgba(247,241,234,.45);margin-top:6px}
+.btn-row.wrap-row{flex-wrap:wrap}
+.btn-row.wrap-row .btn{flex:1 1 45%}
+.note{font-size:12.5px;color:var(--muted);text-align:center;margin-top:14px}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:#241a10;border:1px solid rgba(255,176,103,.4);color:var(--text);padding:12px 20px;border-radius:14px;font-size:14px;opacity:0;pointer-events:none;transition:all .3s;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:480px){.bud-grid{grid-template-columns:1fr}.opt .opt-t span{display:none}}
 </style>
 </head>
 <body>
 <div class="bg"></div>
+<div class="orb a"></div><div class="orb b"></div>
 <header>
   <div class="top">
     <div class="mark">A</div>
@@ -40,28 +103,243 @@ textarea{resize:vertical;min-height:90px}
     <a class="back" href="index.html">← На сайт</a>
   </div>
 </header>
+
 <div class="wrap">
   <h1>Оставить заявку</h1>
-  <p class="lead">Оценю задачу бесплатно и отвечу в течение рабочего дня.</p>
+  <p class="lead">Ответьте на пару вопросов — заявка соберётся сама, останется отправить.</p>
+
+  <div class="progress">
+    <div class="p-steps">
+      <div class="p-dot on" id="dot1"><i></i></div>
+      <div class="p-dot" id="dot2"><i></i></div>
+      <div class="p-dot" id="dot3"><i></i></div>
+    </div>
+    <span class="p-label" id="pLabel">Шаг <b>1</b> из 3</span>
+  </div>
+
   <div class="form-card">
-    <label>Как вас зовут?</label>
-    <input type="text" placeholder="Имя" />
-    <label>Telegram или телефон</label>
-    <input type="text" placeholder="@username или +7..."/>
-    <label>Какой бот вам нужен?</label>
-    <select>
-      <option value="">Выберите тип</option>
-      <option>Бот записи — от 15 000 руб.</option>
-      <option>Бот поддержки — от 20 000 руб.</option>
-      <option>Бот для канала — от 25 000 руб.</option>
-      <option>Бот-магазин — от 30 000 руб.</option>
-      <option>Другое / не знаю</option>
-    </select>
-    <label>Опишите задачу</label>
-    <textarea placeholder="Что должен делать бот? Есть ли интеграции? Любая дополнительная инфо..."></textarea>
-    <a class="btn" href="https://t.me/" target="_blank">Отправить в Telegram</a>
-    <p class="note">Нажмите кнопку — откроется Telegram с предзаполненным сообщением. Отвечу в течение рабочего дня.</p>
+
+    <!-- ШАГ 1: тип бота -->
+    <div class="step active" data-step="1">
+      <p class="q">Какой бот вам нужен?</p>
+      <p class="q-sub">Можно примерно — потом уточним.</p>
+      <div class="opts" id="typeOpts">
+        <button type="button" class="opt" data-k="Бот записи — от 15 000 ₽"><span class="emo">📅</span><span class="opt-t"><b>Бот записи</b><span>Клиент записывается сам · от 15 000 ₽</span></span><span class="check">✓</span></button>
+        <button type="button" class="opt" data-k="Бот поддержки — от 20 000 ₽"><span class="emo">🛟</span><span class="opt-t"><b>Бот поддержки</b><span>Отвечает на FAQ · от 20 000 ₽</span></span><span class="check">✓</span></button>
+        <button type="button" class="opt" data-k="Бот для канала — от 25 000 ₽"><span class="emo">📢</span><span class="opt-t"><b>Бот для канала</b><span>Заявки прямо из постов · от 25 000 ₽</span></span><span class="check">✓</span></button>
+        <button type="button" class="opt" data-k="Бот-магазин — от 30 000 ₽"><span class="emo">🛍️</span><span class="opt-t"><b>Бот-магазин</b><span>Каталог, корзина, оплата · от 30 000 ₽</span></span><span class="check">✓</span></button>
+        <button type="button" class="opt" data-k="Пока не знаю, нужен совет"><span class="emo">💡</span><span class="opt-t"><b>Пока не знаю</b><span>Опишу задачу — подберём вместе</span></span><span class="check">✓</span></button>
+      </div>
+      <p class="err" id="err1">Выберите вариант, чтобы продолжить</p>
+      <div class="btn-row">
+        <button class="btn primary" id="toStep2" disabled>Далее →</button>
+      </div>
+    </div>
+
+    <!-- ШАГ 2: детали -->
+    <div class="step" data-step="2">
+      <p class="q">Пара слов о задаче</p>
+      <p class="q-sub">Что должен делать бот? Можно своими словами.</p>
+      <textarea id="taskText" placeholder="Например: бот для записи в барбершоп, чтобы клиент сам выбирал мастера и время…"></textarea>
+      <div class="chips">
+        <span class="chip">+ 💳 Онлайн-оплата</span>
+        <span class="chip">+ 📊 Google Таблицы</span>
+        <span class="chip">+ 🔔 Напоминания клиентам</span>
+        <span class="chip">+ 🗓 Расписание мастеров</span>
+        <span class="chip">+ 📣 Рассылка</span>
+        <span class="chip">+ 👥 CRM / база клиентов</span>
+      </div>
+      <label>Ориентировочный бюджет</label>
+      <div class="bud-grid" id="budGrid">
+        <button type="button" class="bud" data-b="до 20 000 ₽">до 20 000 ₽</button>
+        <button type="button" class="bud" data-b="20–40 тыс. ₽">20–40 тыс. ₽</button>
+        <button type="button" class="bud" data-b="больше 40 000 ₽">больше 40 000 ₽</button>
+        <button type="button" class="bud sel" data-b="посоветуйте">посоветуйте</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn ghost" data-back>← Назад</button>
+        <button class="btn primary" id="toStep3">Далее →</button>
+      </div>
+    </div>
+
+    <!-- ШАГ 3: контакты -->
+    <div class="step" data-step="3">
+      <p class="q">Куда ответить?</p>
+      <p class="q-sub">Напишу вам в течение рабочего дня.</p>
+      <label>Ваше имя</label>
+      <input id="nameInput" type="text" placeholder="Имя" autocomplete="name">
+      <label>Telegram или телефон</label>
+      <input id="contactInput" type="text" placeholder="@username или +7…" autocomplete="tel">
+      <p class="err" id="err3">Укажите имя и контакт (@username или телефон)</p>
+      <div class="btn-row">
+        <button class="btn ghost" data-back>← Назад</button>
+        <button class="btn primary" id="finishBtn">Собрать заявку 🚀</button>
+      </div>
+    </div>
+
+    <!-- ГОТОВО -->
+    <div class="step" data-step="4">
+      <div class="done">
+        <div class="done-icon">✈️</div>
+        <h2>Заявка готова!</h2>
+        <p class="q-sub">Проверьте текст и отправьте — Telegram откроется сам.</p>
+        <div class="msg-preview" id="msgPreview"></div>
+        <div class="btn-row wrap-row">
+          <button class="btn ghost" id="copyBtn">📋 Скопировать</button>
+          <button class="btn primary" id="tgBtn">✈️ Отправить в Telegram</button>
+        </div>
+        <p class="note">Кнопка скопирует текст и откроет Telegram — вставьте сообщение в наш чат.<br>Так быстрее всего: я сразу увижу задачу и отвечу с оценкой.</p>
+        <p class="note"><a href="#" id="restartLink" style="font-size:12.5px">← Заполнить заново</a></p>
+      </div>
+    </div>
+
   </div>
 </div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ▼▼ Впишите свой @username без @ — тогда кнопка откроет ваш чат напрямую ▼▼
+var TG_USERNAME = '';
+var SITE_URL = 'https://ckot23.github.io/ATELIER_Bot.io/';
+
+var data = { type:'', budget:'посоветуйте', task:'', name:'', contact:'' };
+var stepEls = Array.prototype.slice.call(document.querySelectorAll('.step'));
+var toastEl = document.getElementById('toast');
+var toastTimer = null;
+var current = 1;
+var finalText = '';
+
+function toast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 2600);
+}
+function goTo(n){
+  current = n;
+  stepEls.forEach(function(s){ s.classList.toggle('active', +s.dataset.step === n); });
+  [1,2,3].forEach(function(i){
+    document.getElementById('dot'+i).classList.toggle('on', n > i || (n === i));
+  });
+  var lbl = document.getElementById('pLabel');
+  if(n < 4){ lbl.style.display = ''; lbl.innerHTML = 'Шаг <b>' + n + '</b> из 3'; }
+  else { lbl.style.display = 'none'; }
+  var card = document.querySelector('.form-card');
+  if(n === 4){ document.getElementById('dot1').classList.add('on'); document.getElementById('dot2').classList.add('on'); document.getElementById('dot3').classList.add('on'); }
+  card.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+function shake(el){ el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }
+
+/* Шаг 1 — тип бота */
+document.getElementById('typeOpts').addEventListener('click', function(e){
+  var btn = e.target.closest('.opt'); if(!btn) return;
+  document.querySelectorAll('#typeOpts .opt').forEach(function(o){ o.classList.remove('sel'); });
+  btn.classList.add('sel');
+  data.type = btn.dataset.k;
+  document.getElementById('toStep2').disabled = false;
+  document.getElementById('err1').style.display = 'none';
+});
+document.getElementById('toStep2').addEventListener('click', function(){
+  if(!data.type){ shake(document.getElementById('err1')); document.getElementById('err1').style.display = 'block'; return; }
+  goTo(2);
+});
+
+/* Шаг 2 — чипсы и бюджет */
+document.querySelector('.chips').addEventListener('click', function(e){
+  var c = e.target.closest('.chip'); if(!c) return;
+  var t = document.getElementById('taskText');
+  var add = c.textContent.replace(/^\+\s*/, '');
+  t.value = t.value ? (t.value.replace(/[\s.;]*$/,'') + '; ' + add.charAt(0).toLowerCase() + add.slice(1)) : add;
+  t.focus();
+});
+document.getElementById('budGrid').addEventListener('click', function(e){
+  var b = e.target.closest('.bud'); if(!b) return;
+  document.querySelectorAll('#budGrid .bud').forEach(function(x){ x.classList.remove('sel'); });
+  b.classList.add('sel');
+  data.budget = b.dataset.b;
+});
+document.getElementById('toStep3').addEventListener('click', function(){ goTo(3); });
+
+/* Шаг 3 — контакты */
+function validContact(v){
+  v = v.trim();
+  if(!v) return false;
+  if(v.indexOf('@') === 0) return v.length >= 4;
+  var digits = v.replace(/\D/g, '');
+  return digits.length >= 7 || v.length >= 4;
+}
+document.getElementById('finishBtn').addEventListener('click', function(){
+  var name = document.getElementById('nameInput').value.trim();
+  var contact = document.getElementById('contactInput').value.trim();
+  if(name.length < 2 || !validContact(contact)){
+    var err = document.getElementById('err3');
+    err.style.display = 'block'; shake(err);
+    return;
+  }
+  document.getElementById('err3').style.display = 'none';
+  data.name = name; data.contact = contact;
+  data.task = document.getElementById('taskText').value.trim();
+  finalText =
+    '🚀 Заявка с сайта ATELIER\n\n' +
+    '▪️ Тип: ' + data.type + '\n' +
+    '▪️ Бюджет: ' + data.budget + '\n' +
+    '▪️ Задача: ' + (data.task || '—') + '\n\n' +
+    '👤 ' + data.name + '\n' +
+    '📱 ' + data.contact;
+  var prev = document.getElementById('msgPreview');
+  prev.textContent = finalText;
+  var time = document.createElement('span');
+  time.className = 'mp-time';
+  time.textContent = 'только что ✓✓';
+  prev.appendChild(time);
+  goTo(4);
+});
+
+/* Назад */
+document.querySelectorAll('[data-back]').forEach(function(b){
+  b.addEventListener('click', function(){ goTo(current - 1); });
+});
+
+/* Копирование и отправка */
+function copyText(t, cb){
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(t).then(cb, function(){ fallbackCopy(t); cb(); });
+  } else { fallbackCopy(t); cb(); }
+}
+function fallbackCopy(t){
+  var ta = document.createElement('textarea');
+  ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); } catch(e){}
+  document.body.removeChild(ta);
+}
+document.getElementById('copyBtn').addEventListener('click', function(){
+  copyText(finalText, function(){ toast('✅ Текст скопирован'); });
+});
+document.getElementById('tgBtn').addEventListener('click', function(){
+  copyText(finalText, function(){});
+  var url;
+  if(TG_USERNAME){
+    url = 'https://t.me/' + TG_USERNAME;
+    toast('✅ Скопировано — вставьте в чат (Ctrl+V)');
+  } else {
+    url = 'https://t.me/share/url?url=' + encodeURIComponent(SITE_URL) + '&text=' + encodeURIComponent(finalText);
+    toast('✈️ Открываю Telegram…');
+  }
+  window.open(url, '_blank');
+});
+document.getElementById('restartLink').addEventListener('click', function(e){
+  e.preventDefault();
+  document.querySelectorAll('#typeOpts .opt').forEach(function(o){ o.classList.remove('sel'); });
+  document.getElementById('toStep2').disabled = true;
+  goTo(1);
+});
+
+/* Enter на шаге 3 */
+document.getElementById('contactInput').addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){ document.getElementById('finishBtn').click(); }
+});
+</script>
 </body>
 </html>
