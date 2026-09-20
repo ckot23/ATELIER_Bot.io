@@ -72,6 +72,7 @@ label:first-of-type{margin-top:0}
 .btn.primary{background:linear-gradient(175deg,#ffb067,#e8893a);color:var(--ink);flex:1}
 .btn.primary:hover{transform:scale(1.02);box-shadow:0 8px 26px rgba(196,92,34,.4)}
 .btn.primary:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.loading{opacity:.7;pointer-events:none}
 .btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--text)}
 .btn.ghost:hover{border-color:rgba(255,176,103,.5)}
 .err{color:#ff8f6b;font-size:13px;margin-top:8px;display:none}
@@ -185,10 +186,11 @@ label:first-of-type{margin-top:0}
         <p class="q-sub">Проверьте текст и отправьте — Telegram откроется сам.</p>
         <div class="msg-preview" id="msgPreview"></div>
         <div class="btn-row wrap-row">
-          <button class="btn ghost" id="copyBtn">📋 Скопировать</button>
-          <button class="btn primary" id="tgBtn">✈️ Отправить в Telegram</button>
+          <button class="btn ghost" id="copyBtn">📋 Скопировать текст</button>
+          <button class="btn primary" id="sendBtn">🚀 Отправить заявку</button>
         </div>
-        <p class="note">Кнопка скопирует текст и откроет Telegram — вставьте сообщение в наш чат.<br>Так быстрее всего: я сразу увижу задачу и отвечу с оценкой.</p>
+        <p class="err" id="sendErr"></p>
+        <p class="note">Заявка улетит напрямую мне в Telegram — отвечу в течение рабочего дня.<br>Если вдруг не отправилось — <a href="#" id="manualTg">отправьте вручную через Telegram</a>.</p>
         <p class="note"><a href="#" id="restartLink" style="font-size:12.5px">← Заполнить заново</a></p>
       </div>
     </div>
@@ -199,8 +201,9 @@ label:first-of-type{margin-top:0}
 <div class="toast" id="toast"></div>
 
 <script>
-// ▼▼ Впишите свой @username без @ — тогда кнопка откроет ваш чат напрямую ▼▼
-var TG_USERNAME = '';
+// ▼▼ Настройки Telegram-уведомлений ▼▼
+var TG_TOKEN = '8943280869:AAHFxKGh5R-jYh0OJot5xOoPp_nbt7E04pk'; // токен бота @ATELIER23bot
+var TG_CHAT_ID = '7114829971';     // id модератора — сюда прилетают заявки
 var SITE_URL = 'https://ckot23.github.io/ATELIER_Bot.io/';
 
 var data = { type:'', budget:'посоветуйте', task:'', name:'', contact:'' };
@@ -314,20 +317,57 @@ function fallbackCopy(t){
   try { document.execCommand('copy'); } catch(e){}
   document.body.removeChild(ta);
 }
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function buildHtmlText(){
+  return '🚀 <b>Новая заявка с сайта ATELIER</b>\n\n' +
+    '▪️ <b>Тип:</b> ' + escHtml(data.type) + '\n' +
+    '▪️ <b>Бюджет:</b> ' + escHtml(data.budget) + '\n' +
+    '▪️ <b>Задача:</b> ' + escHtml(data.task || '—') + '\n\n' +
+    '👤 ' + escHtml(data.name) + '\n' +
+    '📱 <code>' + escHtml(data.contact) + '</code>';
+}
+function markSent(){
+  var btn = document.getElementById('sendBtn');
+  btn.textContent = '✅ Отправлено'; btn.disabled = true; btn.classList.remove('loading');
+  document.querySelector('[data-step="4"] .done-icon').textContent = '✅';
+  document.querySelector('[data-step="4"] h2').textContent = 'Заявка отправлена!';
+  document.querySelector('[data-step="4"] .q-sub').textContent = 'Заявка доставлена! Отвечу в Telegram в течение рабочего дня.';
+  toast('✅ Заявка отправлена модератору');
+}
+function sendToBot(){
+  var btn = document.getElementById('sendBtn');
+  var err = document.getElementById('sendErr');
+  err.style.display = 'none';
+  if(!TG_TOKEN){
+    err.textContent = '⚠️ Авто-отправка пока не настроена. Текст заявки скопирован — отправьте его вручную по ссылке ниже.';
+    err.style.display = 'block';
+    copyText(finalText, function(){});
+    return;
+  }
+  btn.classList.add('loading'); btn.textContent = '⏳ Отправляю…'; btn.disabled = true;
+  fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: buildHtmlText(), parse_mode: 'HTML', disable_web_page_preview: true })
+  }).then(function(r){ return r.json(); }).then(function(j){
+    if(j && j.ok){ markSent(); } else { fail(j); }
+  }).catch(function(){ fail(null); });
+  function fail(j){
+    btn.classList.remove('loading'); btn.textContent = '🚀 Отправить заявку'; btn.disabled = false;
+    err.textContent = '⚠️ Не удалось отправить автоматически' + (j && j.error_code ? ' (код ' + j.error_code + ')' : ' (сеть недоступна)') + '. Текст заявки скопирован — отправьте его вручную через Telegram.';
+    err.style.display = 'block';
+    copyText(finalText, function(){});
+  }
+}
+document.getElementById('sendBtn').addEventListener('click', sendToBot);
 document.getElementById('copyBtn').addEventListener('click', function(){
   copyText(finalText, function(){ toast('✅ Текст скопирован'); });
 });
-document.getElementById('tgBtn').addEventListener('click', function(){
+document.getElementById('manualTg').addEventListener('click', function(e){
+  e.preventDefault();
   copyText(finalText, function(){});
-  var url;
-  if(TG_USERNAME){
-    url = 'https://t.me/' + TG_USERNAME;
-    toast('✅ Скопировано — вставьте в чат (Ctrl+V)');
-  } else {
-    url = 'https://t.me/share/url?url=' + encodeURIComponent(SITE_URL) + '&text=' + encodeURIComponent(finalText);
-    toast('✈️ Открываю Telegram…');
-  }
-  window.open(url, '_blank');
+  window.open('https://t.me/share/url?url=' + encodeURIComponent(SITE_URL) + '&text=' + encodeURIComponent(finalText), '_blank');
+  toast('✈️ Открываю Telegram…');
 });
 document.getElementById('restartLink').addEventListener('click', function(e){
   e.preventDefault();
