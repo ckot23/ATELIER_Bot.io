@@ -3,547 +3,323 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="ATELIER — разработка Telegram-ботов на заказ" />
-<meta property="og:description" content="Боты для заявок, продаж, записи и поддержки — от 15 000 руб. Оценка до начала работ. Код ваш." />
-<meta property="og:image" content="https://ckot23.github.io/ATELIER_Bot.io/img/preview.jpg" />
-<meta property="og:url" content="https://ckot23.github.io/ATELIER_Bot.io/" />
-<meta property="og:type" content="website" />
-<meta name="twitter:card" content="summary_large_image" />
-<link rel="icon" type="image/jpeg" href="img/preview.jpg" />
-<title>ATELIER — разработка Telegram-ботов на заказ</title>
+<title>ATELIER — Боты Telegram на заказ</title>
+<meta name="description" content="Боты для заявок, продаж, записи и поддержки — от 15 000 руб. Оценка до начала работ. Код ваш." />
 <style>
-:root {
-  --text: #f7f1ea; --muted: rgba(247,241,234,.66);
-  --accent: #e8893a; --accent-2: #ffb067; --ink: #1a120c;
-  --line: rgba(255,196,140,.18); --surface: rgba(20,16,12,.72);
-  --max: 1120px;
-}
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  margin: 0; color: var(--text);
-  font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #070706; overflow-x: hidden;
-}
-img { display: block; max-width: 100%; }
-a { color: var(--accent-2); text-decoration: none; }
-button, input, textarea, select { font: inherit; color: inherit; }
-button { cursor: pointer; }
-
-/* ---------- SCROLL REVEAL ---------- */
-.reveal {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity .65s ease, transform .65s ease;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: none;
-}
-.reveal-left  { opacity:0; transform: translateX(-40px); transition: opacity .65s ease, transform .65s ease; }
-.reveal-right { opacity:0; transform: translateX( 40px); transition: opacity .65s ease, transform .65s ease; }
-.reveal-left.visible, .reveal-right.visible { opacity:1; transform:none; }
-.delay-1 { transition-delay: .1s; }
-.delay-2 { transition-delay: .2s; }
-.delay-3 { transition-delay: .3s; }
-.delay-4 { transition-delay: .4s; }
-
-/* ---------- BG & ORBS ---------- */
-.bg {
-  position: fixed; inset: 0; z-index: -2;
-  background:
-    radial-gradient(80% 50% at 80% 20%, rgba(232,137,58,.22), transparent 55%),
-    radial-gradient(90% 60% at 10% 90%, rgba(232,137,58,.45), transparent 50%),
-    linear-gradient(180deg, #070706 0%, #140f0c 45%, #c45c22 100%);
-  animation: bgShift 12s ease-in-out infinite alternate;
-}
-.orb { position: fixed; border-radius: 50%; filter: blur(40px); pointer-events: none; z-index: -1; mix-blend-mode: screen; }
-.orb.a { width:280px; height:280px; background:rgba(255,176,103,.28); left:-60px; top:20%; animation:float 9s ease-in-out infinite; }
-.orb.b { width:360px; height:360px; background:rgba(196,92,34,.35);  right:-80px; top:8%; animation:float 11s ease-in-out infinite reverse; }
-.orb.c { width:220px; height:220px; background:rgba(232,137,58,.22); left:40%; bottom:8%; animation:float 8s ease-in-out infinite 1s; }
-
-/* ---------- LAYOUT ---------- */
-.wrap { width: min(100% - 32px, var(--max)); margin: 0 auto; }
-header {
-  position: sticky; top: 0; z-index: 30;
-  background: linear-gradient(180deg,rgba(7,7,6,.94),rgba(7,7,6,.55) 80%,transparent);
-  backdrop-filter: blur(14px);
-}
-.top { display:flex; align-items:center; gap:16px; padding:14px 0; width:min(100% - 32px,var(--max)); margin:0 auto; }
-.brand { display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
-.mark {
-  width:36px; height:36px; border-radius:10px;
-  background:linear-gradient(160deg,#ffb067,#e8893a);
-  color:var(--ink); display:grid; place-items:center; font-weight:750;
-}
-.brand strong,.brand span { display:block; }
-.brand span { font-size:12px; color:var(--muted); }
-nav { display:none; gap:6px; }
-nav a { color:var(--muted); padding:8px 12px; border-radius:10px; transition:color .18s; }
-nav a:hover { color:var(--text); }
-
-/* ---------- BUTTONS ---------- */
-.btn {
-  display:inline-flex; align-items:center; justify-content:center;
-  min-height:48px; padding:0 22px; border-radius:12px; border:0; font-weight:650;
-  position:relative; overflow:hidden; transition:transform .18s ease, box-shadow .18s ease;
-}
-.btn:hover { transform:scale(1.04); box-shadow:0 0 0 1px rgba(255,176,103,.35),0 12px 30px rgba(196,92,34,.3); }
-.btn.primary { background:linear-gradient(180deg,var(--accent-2),var(--accent)); color:var(--ink); }
-.btn.ghost   { background:var(--surface); border:1px solid var(--line); color:var(--text); }
-.btn:disabled { opacity:.6; cursor:not-allowed; }
-
-/* ---------- HERO ---------- */
-.hero { display:grid; gap:32px; padding:28px 0 24px; align-items:center; }
-.kicker { font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent-2); margin:0 0 10px; }
-h1 { margin:0 0 12px; font-size:34px; line-height:1.12; }
-h2 { margin:0 0 8px; font-size:28px; }
-.lead,.sub { margin:0 0 20px; color:var(--muted); max-width:58ch; }
-.cta-row { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px; }
-.trust { display:grid; gap:8px; margin:0; padding:0; list-style:none; color:var(--muted); font-size:14px; }
-.trust li { padding-left:18px; position:relative; }
-.trust li::before { content:""; position:absolute; left:0; top:8px; width:8px; height:8px; border-radius:50%; background:var(--accent); }
-
-/* ---------- STATS ---------- */
-.stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin:8px 0 40px; }
-.stat,.card,.step,.faq,.panel {
-  background:var(--surface); border:1px solid var(--line); border-radius:14px; backdrop-filter:blur(12px);
-}
-.stat { text-align:center; padding:16px 8px; transition:transform .18s,box-shadow .18s; }
-.stat:hover { transform:scale(1.04); box-shadow:0 0 0 1px rgba(255,176,103,.35),0 12px 30px rgba(196,92,34,.3); }
-.stat b { display:block; font-size:17px; }
-.stat span { color:var(--muted); font-size:12px; }
-
-/* ---------- SECTIONS ---------- */
-section { padding:8px 0 48px; }
-.offer { padding:20px; }
-.offer ol { margin:12px 0 0; padding-left:20px; color:var(--muted); }
-.grid-2,.steps { display:grid; gap:14px; }
-
-/* ---------- CARDS (services) ---------- */
-.card { overflow:hidden; padding:0; transition:transform .18s,box-shadow .18s; }
-.card:hover { transform:translateY(-4px); box-shadow:0 20px 50px rgba(196,92,34,.25); }
-.card-photo { height:180px; width:100%; object-fit:cover; }
-.card-body { padding:16px 18px 18px; }
-.card h3,.step h3,.faq h3 { margin:0 0 6px; font-size:18px; }
-.price { color:var(--accent-2); font-weight:650; margin:0 0 10px; }
-.card p,.step p,.faq p { margin:0 0 10px; color:var(--muted); }
-.card ul { margin:0; padding-left:18px; color:var(--muted); font-size:14px; }
-
-/* ---------- PORTFOLIO ---------- */
-.portfolio-grid { display:grid; gap:14px; }
-.pcard {
-  background:var(--surface); border:1px solid var(--line); border-radius:14px;
-  backdrop-filter:blur(12px); padding:24px;
-  transition:transform .18s,box-shadow .18s;
-  display:grid; gap:12px;
-}
-.pcard:hover { transform:translateY(-4px); box-shadow:0 20px 50px rgba(196,92,34,.25); }
-.pcard-top { display:flex; align-items:center; gap:14px; }
-.pcard-icon {
-  width:48px; height:48px; border-radius:12px; flex-shrink:0;
-  background:linear-gradient(135deg,#ffb067,#e8893a);
-  display:grid; place-items:center; font-size:22px;
-}
-.pcard h3 { margin:0; font-size:17px; }
-.pcard-tag { display:inline-block; background:rgba(232,137,58,.18); border:1px solid rgba(232,137,58,.3); border-radius:999px; padding:2px 10px; font-size:12px; color:var(--accent-2); margin-bottom:4px; }
-.pcard p { margin:0; color:var(--muted); font-size:14px; line-height:1.5; }
-.pcard-chips { display:flex; flex-wrap:wrap; gap:6px; }
-.chip { background:rgba(255,255,255,.06); border:1px solid var(--line); border-radius:8px; padding:3px 10px; font-size:12px; color:var(--muted); }
-
-/* ---------- REVIEWS ---------- */
-.reviews-grid { display:grid; gap:14px; }
-.rcard {
-  background:var(--surface); border:1px solid var(--line); border-radius:14px;
-  backdrop-filter:blur(12px); padding:22px;
-  transition:transform .18s,box-shadow .18s;
-}
-.rcard:hover { transform:translateY(-3px); box-shadow:0 16px 40px rgba(196,92,34,.2); }
-.rcard-stars { color:#ffb067; font-size:15px; margin-bottom:10px; letter-spacing:2px; }
-.rcard-text { color:var(--muted); font-size:14px; line-height:1.6; margin:0 0 16px; font-style:italic; }
-.rcard-author { display:flex; align-items:center; gap:10px; }
-.rcard-avatar {
-  width:38px; height:38px; border-radius:50%;
-  background:linear-gradient(135deg,#ffb067,#c45c22);
-  display:grid; place-items:center; font-weight:750; font-size:14px; color:var(--ink); flex-shrink:0;
-}
-.rcard-name { font-size:14px; font-weight:600; }
-.rcard-role { font-size:12px; color:var(--muted); }
-
-/* ---------- STEPS ---------- */
-.step { padding:18px; transition:transform .18s,box-shadow .18s; }
-.step:hover { transform:translateY(-3px); box-shadow:0 12px 30px rgba(196,92,34,.2); }
-.num { color:var(--accent-2); font-weight:750; margin:0 0 8px; font-size:28px; }
-
-/* ---------- FAQ ---------- */
-.faq { padding:16px 18px; margin-bottom:10px; cursor:pointer; transition:border-color .2s; }
-.faq:hover { border-color:rgba(255,176,103,.35); }
-.faq h3 { margin:0; display:flex; justify-content:space-between; align-items:center; }
-.faq h3::after { content:'+'; color:var(--accent-2); font-size:20px; transition:transform .25s; }
-.faq.open h3::after { transform:rotate(45deg); }
-.faq p { margin:10px 0 0; display:none; }
-.faq.open p { display:block; }
-
-/* ---------- FLOATING TG BUTTON ---------- */
-.tg-float {
-  position:fixed; bottom:28px; right:24px; z-index:100;
-  width:56px; height:56px; border-radius:50%;
-  background:linear-gradient(135deg,#2aabee,#1a8fc7);
-  display:grid; place-items:center;
-  box-shadow:0 4px 20px rgba(42,171,238,.5);
-  transition:transform .2s, box-shadow .2s;
-  animation:tgPulse 3s ease-in-out infinite;
-}
-.tg-float:hover { transform:scale(1.12); box-shadow:0 8px 30px rgba(42,171,238,.7); animation:none; }
-.tg-float svg { width:28px; height:28px; fill:#fff; }
-@keyframes tgPulse {
-  0%,100% { box-shadow:0 4px 20px rgba(42,171,238,.5); }
-  50%      { box-shadow:0 4px 30px rgba(42,171,238,.8), 0 0 0 8px rgba(42,171,238,.15); }
-}
-
-/* ---------- PHONE MOCKUP ---------- */
-.stage { position:relative; min-height:420px; }
-.hero-photo { position:absolute; inset:8% 6% auto 6%; height:46%; object-fit:cover; border-radius:20px; opacity:.35; z-index:-1; }
-.phone {
-  width:min(100%,280px); margin:0 auto; background:#111; border-radius:32px;
-  border:1px solid rgba(255,196,140,.28); padding:14px 12px 18px;
-  box-shadow:0 30px 60px rgba(0,0,0,.45); animation:phoneFloat 5s ease-in-out infinite;
-}
-.notch { width:88px; height:8px; border-radius:8px; background:#2a2a28; margin:4px auto 12px; }
-.chat { display:flex; flex-direction:column; gap:8px; min-height:280px; }
-.bubble { max-width:86%; padding:10px 12px; border-radius:14px; font-size:13px; opacity:0; transform:translateY(10px); animation:pop .5s ease forwards; }
-.in  { align-self:flex-start; background:#2a231c; }
-.out { align-self:flex-end; background:linear-gradient(180deg,#ffb067,#e8893a); color:var(--ink); }
-.b1{animation-delay:.3s} .b2{animation-delay:1.1s} .b3{animation-delay:1.9s} .b4{animation-delay:2.7s} .b5{animation-delay:3.5s}
-.chip-float {
-  position:absolute; padding:8px 12px; border-radius:999px; font-size:12px; font-weight:650;
-  background:rgba(20,16,12,.85); border:1px solid var(--line); animation:chip 6s ease-in-out infinite;
-}
-.c1{top:8%;left:0} .c2{top:42%;right:0;animation-delay:1.2s} .c3{bottom:12%;left:4%;animation-delay:2s}
-
-/* ---------- FOOTER ---------- */
-footer { border-top:1px solid var(--line); padding:32px 0 48px; color:var(--muted); }
-.foot { display:grid; gap:12px; }
-
-/* ---------- KEYFRAMES ---------- */
-@keyframes bgShift { from{filter:saturate(1)} to{filter:saturate(1.15)} }
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-28px)} }
-@keyframes phoneFloat { 0%,100%{transform:translateY(0) rotate(-1deg)} 50%{transform:translateY(-12px) rotate(1deg)} }
-@keyframes pop { to{opacity:1;transform:none} }
-@keyframes chip { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-
-/* ---------- RESPONSIVE ---------- */
-@media (max-width:899px) {
-  .chip-float,.hero-photo { display:none; }
-  .phone { animation:none; transform:none; }
-  .stage { min-height:0; }
-  .chat { min-height:220px; }
-}
-@media (min-width:900px) {
-  .wrap,.top { width:min(100% - 64px,var(--max)); }
-  nav { display:flex; }
-  h1 { font-size:52px; max-width:12ch; }
-  .hero { grid-template-columns:1.05fr .95fr; gap:48px; min-height:78vh; padding:40px 0 20px; }
-  .trust { grid-template-columns:1fr 1fr; }
-  .grid-2,.steps { grid-template-columns:1fr 1fr; }
-  .portfolio-grid { grid-template-columns:1fr 1fr; }
-  .reviews-grid { grid-template-columns:1fr 1fr 1fr; }
-  .foot { grid-template-columns:1.4fr 1fr 1fr; gap:24px; }
-}
-@media (prefers-reduced-motion:reduce) {
-  *,*::before,*::after { animation:none !important; transition:none !important; }
-  .bubble { opacity:1; transform:none; }
-  .reveal,.reveal-left,.reveal-right { opacity:1; transform:none; }
+:root{--text:#f7f1ea;--muted:rgba(247,241,234,.66);--accent:#e8893a;--accent-2:#ffb067;--ink:#1a120c;--line:rgba(255,196,140,.18);--surface:rgba(20,16,12,.72);--max:900px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{color:var(--text);font:16px/1.65 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#070706;overflow-x:hidden}
+a{color:var(--accent-2);text-decoration:none}
+.bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(80% 50% at 80% 20%,rgba(232,137,58,.22),transparent 55%),radial-gradient(90% 60% at 10% 90%,rgba(232,137,58,.35),transparent 50%),linear-gradient(180deg,#070706 0%,#140f0c 60%,#0e0905 100%)}
+.orb{position:fixed;border-radius:50%;filter:blur(44px);pointer-events:none;z-index:-1;mix-blend-mode:screen}
+.orb.a{width:300px;height:300px;background:rgba(255,176,103,.2);left:-80px;top:15%;animation:float 9s ease-in-out infinite}
+.orb.b{width:360px;height:360px;background:rgba(196,92,34,.28);right:-100px;top:5%;animation:float 11s ease-in-out infinite reverse}
+header{position:sticky;top:0;z-index:30;backdrop-filter:blur(16px);background:linear-gradient(180deg,rgba(7,7,6,.92) 60%,transparent)}
+.top{display:flex;align-items:center;gap:12px;padding:13px 24px;max-width:var(--max);margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;flex:1}
+.mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(150deg,#ffb067,#e8893a);color:var(--ink);display:grid;place-items:center;font-weight:800;font-size:15px;flex-shrink:0}
+.brand-text strong{display:block;font-size:15px;line-height:1.2}
+.brand-text span{font-size:11px;color:var(--muted)}
+nav{display:flex;gap:4px}
+nav a{font-size:13px;color:var(--muted);padding:7px 12px;border-radius:8px;transition:color .15s,background .15s}
+nav a:hover{color:var(--text);background:rgba(255,176,103,.08)}
+.wrap{width:min(100% - 32px,var(--max));margin:0 auto;padding:56px 0 80px}
+section{padding:64px 0 0}
+.kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-2);margin-bottom:12px}
+h1{font-size:clamp(32px,5vw,52px);line-height:1.12;margin-bottom:16px}
+h2{font-size:clamp(22px,3.5vw,32px);line-height:1.2;margin-bottom:12px}
+.sub{color:var(--muted);font-size:16px;margin-bottom:36px;max-width:52ch}
+.lead{color:var(--muted);font-size:18px;margin-bottom:32px;max-width:54ch}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 26px;border-radius:12px;font-weight:700;font-size:15px;border:0;cursor:pointer;transition:transform .18s,box-shadow .18s;text-decoration:none}
+.btn:hover{transform:scale(1.04);box-shadow:0 8px 28px rgba(196,92,34,.4)}
+.btn.primary{background:linear-gradient(175deg,#ffb067,#e8893a);color:var(--ink)}
+.btn.ghost{border:1.5px solid var(--line);color:var(--text);background:var(--surface);backdrop-filter:blur(10px)}
+.btn.ghost:hover{border-color:rgba(255,176,103,.5)}
+.hero-btns{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:40px}
+/* STATS */
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 20px;backdrop-filter:blur(10px)}
+.stat b{display:block;font-size:20px;color:var(--text);margin-bottom:2px}
+.stat span{font-size:12px;color:var(--muted)}
+/* HOW */
+.steps{display:grid;gap:12px;margin-top:8px}
+.step{display:grid;grid-template-columns:48px 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;backdrop-filter:blur(10px)}
+.step-num{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#ffb067,#e8893a);display:grid;place-items:center;font-size:19px;font-weight:800;color:var(--ink);flex-shrink:0}
+.step h3{font-size:16px;margin-bottom:4px}
+.step p{font-size:14px;color:var(--muted);margin:0}
+/* SERVICE CARDS */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;backdrop-filter:blur(12px);transition:border-color .2s,transform .2s}
+.card:hover{border-color:rgba(255,176,103,.35);transform:translateY(-2px)}
+.card-photo{width:100%;height:180px;object-fit:cover;display:block;background:#1a120c}
+.card-body{padding:20px}
+.card-body h3{font-size:18px;margin-bottom:6px}
+.price{color:var(--accent-2);font-weight:700;font-size:15px;margin-bottom:10px}
+.card-body p{color:var(--muted);font-size:14px;margin-bottom:10px}
+.card-body ul{padding-left:16px;color:var(--muted);font-size:13px}
+.card-body li{margin-bottom:4px}
+/* PORTFOLIO */
+.portfolio-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;backdrop-filter:blur(10px)}
+.pcard-top{padding:18px 18px 0}
+.pcard-top h3{font-size:16px;margin-bottom:6px}
+.pcard-top p{font-size:13px;color:var(--muted);margin-bottom:12px}
+.pcard-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.tag{font-size:11px;background:rgba(255,176,103,.12);color:var(--accent-2);padding:3px 10px;border-radius:20px;border:1px solid rgba(255,176,103,.2)}
+.pcard-bot{background:rgba(7,7,6,.6);border-top:1px solid var(--line);padding:14px 18px;display:flex;align-items:center;gap:10px}
+.pcard-bot .tg-icon{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#ffb067,#c45c22);display:grid;place-items:center;flex-shrink:0;font-size:18px}
+.pcard-bot span{font-size:13px;color:var(--muted)}
+/* REVIEWS */
+.reviews-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.reviews-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.review{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;backdrop-filter:blur(10px)}
+.review-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ava{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ffb067,#e8893a);display:grid;place-items:center;font-weight:700;color:var(--ink);font-size:16px;flex-shrink:0}
+.review-meta strong{display:block;font-size:14px}
+.review-meta span{font-size:12px;color:var(--muted)}
+.stars{color:#ffb067;font-size:14px;letter-spacing:1px;margin-bottom:8px}
+.review p{font-size:14px;color:var(--muted);font-style:italic}
+.review-cta{background:rgba(232,137,58,.08);border:1px dashed rgba(232,137,58,.3);border-radius:16px;padding:24px;text-align:center;backdrop-filter:blur(8px)}
+.review-cta p{color:var(--muted);font-size:14px;margin-bottom:14px}
+/* FAQ */
+.faq-list{display:flex;flex-direction:column;gap:10px}
+.faq{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;backdrop-filter:blur(10px)}
+.faq h3{font-size:15px;margin-bottom:6px;color:var(--text)}
+.faq p{font-size:14px;color:var(--muted);margin:0}
+/* CTA FINAL */
+.cta-final{background:var(--surface);border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(14px);padding:40px;text-align:center;margin-top:64px}
+.cta-final h2{margin-bottom:10px}
+.cta-final p{color:var(--muted);margin-bottom:24px}
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:none}
+.delay-1{transition-delay:.1s}.delay-2{transition-delay:.2s}.delay-3{transition-delay:.3s}.delay-4{transition-delay:.4s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-24px)}}
+@media(max-width:640px){
+  .grid-2,.portfolio-grid,.reviews-grid{grid-template-columns:1fr}
+  nav{display:none}
 }
 </style>
 </head>
 <body>
 <div class="bg"></div>
-<div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
-
-<!-- Floating Telegram button -->
-<a class="tg-float" href="https://t.me/ckot_23" target="_blank" aria-label="Написать в Telegram">
-  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/>
-  </svg>
-</a>
+<div class="orb a"></div><div class="orb b"></div>
 
 <header>
-<div class="top">
-  <div class="brand">
-    <div class="mark">A</div>
-    <div><strong>ATELIER</strong><span>Боты Telegram на заказ</span></div>
+  <div class="top">
+    <div class="brand">
+      <div class="mark">A</div>
+      <div class="brand-text"><strong>ATELIER</strong><span>Боты Telegram на заказ</span></div>
+    </div>
+    <nav>
+      <a href="#uslugi">Услуги</a>
+      <a href="process.html">Как работаем</a>
+      <a href="#portfolio">Портфолио</a>
+      <a href="#otzyvy">Отзывы</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn primary" href="order.html" style="margin-left:12px;min-height:38px;padding:0 18px;font-size:13px">Обсудить задачу</a>
   </div>
-  <nav>
-    <a href="#uslugi">Услуги</a>
-    <a href="#portfolio">Портфолио</a>
-    <a href="#reviews">Отзывы</a>
-    <a href="process.html">Как работаем</a>
-    <a href="#faq">FAQ</a>
-    <a href="#contacts">Контакты</a>
-  </nav>
-  <a class="btn primary" href="order.html">Заказать бота</a>
-</div>
 </header>
 
-<main class="wrap">
+<div class="wrap">
 
-<!-- HERO -->
-<section class="hero">
-  <div>
-    <p class="kicker">Разработка под ключ</p>
-    <h1>Разработка Telegram-ботов под ключ</h1>
-    <p class="lead">Бот для заявок, продаж, записи и поддержки — от 15 000 руб. До старта согласуем сценарий, смету и сроки. Передаю готовый проект с исходным кодом.</p>
-    <div class="cta-row">
-      <a class="btn primary" href="order.html">Получить оценку</a>
-      <a class="btn ghost" href="https://t.me/ckot_23" target="_blank">Написать в Telegram</a>
+  <!-- HERO -->
+  <section style="padding-top:32px">
+    <p class="kicker reveal">Разработка Telegram-ботов</p>
+    <h1 class="reveal">Бот, который работает<br>на ваш бизнес</h1>
+    <p class="lead reveal">Бот для записи, магазина, поддержки или заявок из канала. Фиксирую цену и срок до старта — код ваш.</p>
+    <div class="hero-btns reveal">
+      <a class="btn primary" href="order.html">Получить оценку бесплатно</a>
+      <a class="btn ghost" href="process.html">Как проходит разработка</a>
     </div>
-    <ul class="trust">
-      <li>Оценка до начала работ</li>
-      <li>Фиксируем объём и смету</li>
-      <li>14 дней правок после запуска</li>
-      <li>Ответ в течение рабочего дня</li>
-    </ul>
-  </div>
-  <div class="stage" aria-hidden="true">
-    <img class="hero-photo" src="img/hero.jpg" alt="" />
-    <span class="chip-float c1">заявка за 10 сек</span>
-    <span class="chip-float c2">оплата в чате</span>
-    <span class="chip-float c3">слот записан</span>
-    <div class="phone">
-      <div class="notch"></div>
-      <div class="chat">
-        <div class="bubble in b1">Привет! Хочу записаться на стрижку</div>
-        <div class="bubble in b2">...</div>
-        <div class="bubble out b3">Свободно завтра в 12:00 и 15:30</div>
-        <div class="bubble in b4">На 12:00, пожалуйста</div>
-        <div class="bubble out b5">Готово. Напомню за час до визита</div>
+    <div class="stats reveal">
+      <div class="stat"><b>от 15 000 ₽</b><span>Стоимость</span></div>
+      <div class="stat"><b>1–14 дней</b><span>Срок</span></div>
+      <div class="stat"><b>14 дней</b><span>Гарантия</span></div>
+      <div class="stat"><b>Код ваш</b><span>Передаю полностью</span></div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section id="kak">
+    <p class="kicker reveal">Просто и понятно</p>
+    <h2 class="reveal">Бот для канала от 25 000 руб. — как это работает</h2>
+    <p class="sub reveal">Разбираю на примере бота для Telegram-канала</p>
+    <div class="steps reveal">
+      <div class="step"><div class="step-num">1</div><div><h3>Вы пишете из поста «Хочу прайс»</h3><p>Читатель нажимает кнопку под постом и попадает в бот.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div><h3>Бот собирает контакт и тему</h3><p>Задаёт 1–2 вопроса и сохраняет имя, телефон или @username.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div><h3>Вы получаете уведомление</h3><p>Заявка приходит вам в Telegram в удобном формате — сразу можно ответить.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div><h3>История хранится в таблице</h3><p>Все заявки — в Google Таблице или вашей CRM. Ничего не теряется.</p></div></div>
+    </div>
+    <div style="margin-top:20px" class="reveal">
+      <a class="btn ghost" href="order.html">Хочу такой бот для канала</a>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="uslugi">
+    <p class="kicker reveal">Что делаю</p>
+    <h2 class="reveal">Боты под конкретную задачу</h2>
+    <p class="sub reveal">Четыре готовых сборки. Цены фиксируются до старта.</p>
+    <div class="grid-2">
+      <article class="card reveal delay-1">
+        <div class="card-photo" style="background:linear-gradient(135deg,#1a0e08,#3a1f0e);display:flex;align-items:center;justify-content:center;font-size:52px">🛒</div>
+        <div class="card-body">
+          <h3>Бот-магазин</h3>
+          <p class="price">от 30 000 руб. · 10–14 дней</p>
+          <p>Каталог, корзина и оплата ЮKassa / СБП прямо в Telegram.</p>
+          <ul><li>Магазин одежды или мерча</li><li>Доставка еды</li><li>Цифровые товары после оплаты</li></ul>
+        </div>
+      </article>
+      <article class="card reveal delay-2">
+        <div class="card-photo" style="background:linear-gradient(135deg,#0e1a10,#1f3a1e);display:flex;align-items:center;justify-content:center;font-size:52px">🎧</div>
+        <div class="card-body">
+          <h3>Бот поддержки</h3>
+          <p class="price">от 20 000 руб. · 7–10 дней</p>
+          <p>Первая линия по FAQ. Сложные вопросы уходят человеку.</p>
+          <ul><li>Статус заказа и возврат</li><li>Онлайн-школа</li><li>Тарифы и передача мастеру</li></ul>
+        </div>
+      </article>
+      <article class="card reveal delay-3">
+        <div class="card-photo" style="background:linear-gradient(135deg,#0e0e1a,#1e1f3a);display:flex;align-items:center;justify-content:center;font-size:52px">📅</div>
+        <div class="card-body">
+          <h3>Бот записи</h3>
+          <p class="price">от 15 000 руб. · 5–10 дней</p>
+          <p>Клиент видит слоты, записывается сам и получает напоминание.</p>
+          <ul><li>Салон и барбершоп</li><li>Стоматология или массаж</li><li>Автосервис на час</li></ul>
+        </div>
+      </article>
+      <article class="card reveal delay-4">
+        <div class="card-photo" style="background:linear-gradient(135deg,#1a100e,#3a1e1a);display:flex;align-items:center;justify-content:center;font-size:52px">📢</div>
+        <div class="card-body">
+          <h3>Бот для канала</h3>
+          <p class="price">от 25 000 руб. · 5–7 дней</p>
+          <p>Из поста сразу заявка. Вы получаете контакт и тему.</p>
+          <ul><li>Консультация из поста</li><li>Анонсы курсов</li><li>«Хочу прайс» из канала</li></ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="portfolio">
+    <p class="kicker reveal">Примеры работ</p>
+    <h2 class="reveal">Портфолио</h2>
+    <p class="sub reveal">Реальные боты, запущенные для клиентов.</p>
+    <div class="portfolio-grid">
+      <div class="pcard reveal delay-1">
+        <div class="pcard-top">
+          <h3>Запись в барбершоп</h3>
+          <p>Клиент выбирает мастера, услугу и время — без звонков. Приходит напоминание за час.</p>
+          <div class="pcard-tags"><span class="tag">Запись</span><span class="tag">Напоминания</span><span class="tag">Расписание</span></div>
+        </div>
+        <div class="pcard-bot"><div class="tg-icon">✂️</div><span>Срок: 7 дней · 18 000 руб.</span></div>
+      </div>
+      <div class="pcard reveal delay-2">
+        <div class="pcard-top">
+          <h3>Магазин мерча</h3>
+          <p>Каталог с фото, выбор размера, оплата ЮKassa, уведомление менеджеру и клиенту.</p>
+          <div class="pcard-tags"><span class="tag">Магазин</span><span class="tag">ЮKassa</span><span class="tag">Каталог</span></div>
+        </div>
+        <div class="pcard-bot"><div class="tg-icon">👕</div><span>Срок: 12 дней · 34 000 руб.</span></div>
+      </div>
+      <div class="pcard reveal delay-3">
+        <div class="pcard-top">
+          <h3>Заявки из Telegram-канала</h3>
+          <p>Кнопка под постом → бот собирает имя и телефон → заявка в Google Таблицу.</p>
+          <div class="pcard-tags"><span class="tag">Канал</span><span class="tag">Заявки</span><span class="tag">Google Таблицы</span></div>
+        </div>
+        <div class="pcard-bot"><div class="tg-icon">📢</div><span>Срок: 5 дней · 26 000 руб.</span></div>
+      </div>
+      <div class="pcard reveal delay-4">
+        <div class="pcard-top">
+          <h3>Поддержка клиентов онлайн-школы</h3>
+          <p>FAQ по курсам, статус доступа, передача сложных вопросов куратору.</p>
+          <div class="pcard-tags"><span class="tag">Поддержка</span><span class="tag">FAQ</span><span class="tag">Онлайн-школа</span></div>
+        </div>
+        <div class="pcard-bot"><div class="tg-icon">🎓</div><span>Срок: 10 дней · 22 000 руб.</span></div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- STATS -->
-<div class="stats">
-  <div class="stat reveal delay-1"><b>от 15 000 руб.</b><span>Стоимость</span></div>
-  <div class="stat reveal delay-2"><b>от 5 дней</b><span>Срок запуска</span></div>
-  <div class="stat reveal delay-3"><b>50% / 50%</b><span>Предоплата</span></div>
+  <!-- REVIEWS -->
+  <section id="otzyvy">
+    <div class="reviews-header">
+      <div>
+        <p class="kicker reveal">Отзывы</p>
+        <h2 class="reveal">Что говорят клиенты</h2>
+      </div>
+      <a class="btn ghost reveal" href="https://t.me/" target="_blank" rel="noopener">✍️ Оставить отзыв</a>
+    </div>
+    <div class="reviews-grid">
+      <div class="review reveal delay-1">
+        <div class="review-head">
+          <div class="ava">М</div>
+          <div class="review-meta"><strong>Михаил К.</strong><span>Барбершоп, Москва</span></div>
+        </div>
+        <div class="stars">★★★★★</div>
+        <p>«Бот записи сделал за 6 дней. Клиенты в восторге — больше не нужно звонить. Звонков стало вдвое меньше.»</p>
+      </div>
+      <div class="review reveal delay-2">
+        <div class="review-head">
+          <div class="ava">А</div>
+          <div class="review-meta"><strong>Анастасия Р.</strong><span>Онлайн-школа</span></div>
+        </div>
+        <div class="stars">★★★★★</div>
+        <p>«Сделали бота поддержки с FAQ. Теперь 70% вопросов закрывается автоматически. Работаем дальше.»</p>
+      </div>
+      <div class="review reveal delay-3">
+        <div class="review-head">
+          <div class="ava">Д</div>
+          <div class="review-meta"><strong>Дмитрий В.</strong><span>Telegram-канал про инвестиции</span></div>
+        </div>
+        <div class="stars">★★★★★</div>
+        <p>«Бот для канала запустили за 5 дней. Из каждого поста теперь идут заявки. Рекомендую.»</p>
+      </div>
+      <div class="review-cta reveal delay-4">
+        <p>Работали вместе? Оставьте отзыв — это помогает другим клиентам принять решение.</p>
+        <a class="btn primary" href="https://t.me/" target="_blank" rel="noopener">✍️ Оставить отзыв</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <p class="kicker reveal">Вопросы и ответы</p>
+    <h2 class="reveal">FAQ</h2>
+    <div class="faq-list">
+      <div class="faq reveal delay-1"><h3>Сколько стоит?</h3><p>Бот записи от 15 000 руб., бот поддержки от 20 000 руб., бот для канала от 25 000 руб., магазин от 30 000 руб. Точную цену называю после разбора задачи.</p></div>
+      <div class="faq reveal delay-2"><h3>Цена меняется в процессе?</h3><p>Нет. Фиксирую сумму до старта — в переписке или в ТЗ. Изменения возможны только если вы просите добавить новый функционал сверх ТЗ.</p></div>
+      <div class="faq reveal delay-3"><h3>На чём пишете?</h3><p>Python + Aiogram. Надёжный стек, под которым работают тысячи ботов. Код читаемый — любой Python-разработчик разберётся.</p></div>
+      <div class="faq reveal"><h3>Где будет работать бот?</h3><p>На сервере VPS (300–700 руб./мес.) или на Render (бесплатно для старта). Помогу настроить или размещу сам.</p></div>
+      <div class="faq reveal delay-1"><h3>Что если бот сломается?</h3><p>14 дней гарантии — баги по ТЗ исправляю бесплатно. После — по договорённости.</p></div>
+      <div class="faq reveal delay-2"><h3>Как оплатить?</h3><p>50% до старта, 50% после демо. Работаю через Kwork/FL.ru (деньги замораживает сервис), или по этапам для крупных проектов.</p></div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <div class="cta-final reveal">
+    <h2>Готовы обсудить задачу?</h2>
+    <p>Оценю бесплатно и отвечу в течение рабочего дня.</p>
+    <a class="btn primary" href="order.html">Оставить заявку</a>
+  </div>
+
 </div>
-
-<!-- STARTER OFFER -->
-<section class="reveal">
-  <div class="panel offer">
-    <p class="kicker">Стартовый пакет</p>
-    <h2>Бот для канала от 15 000 руб.</h2>
-    <p class="sub">Один сценарий: кнопки под постами, заявка и уведомление вам в Telegram.</p>
-    <ol>
-      <li>Сбор заявки и контакта из канала</li>
-      <li>Уведомление о заявке в Telegram</li>
-      <li>Тестирование, запуск и передача проекта</li>
-    </ol>
-    <a class="btn primary" href="order.html" style="margin-top:16px">Обсудить задачу</a>
-  </div>
-</section>
-
-<!-- SERVICES -->
-<section id="uslugi">
-  <p class="kicker reveal">Что делаю</p>
-  <h2 class="reveal">Боты под конкретную задачу</h2>
-  <p class="sub reveal">Четыре сборки. В карточке — зачем бот нужен и где такой сценарий уже работает.</p>
-  <div class="grid-2">
-    <article class="card reveal delay-1">
-      <img class="card-photo" src="img/shop.jpg" alt="Бот-магазин" />
-      <div class="card-body">
-        <h3>Бот-магазин</h3>
-        <p class="price">от 30 000 руб. · 10–14 дней</p>
-        <p>Каталог, корзина и оплата ЮKassa / СБП в Telegram.</p>
-        <ul><li>Магазин одежды или мерча</li><li>Доставка еды</li><li>Цифровые товары после оплаты</li></ul>
-      </div>
-    </article>
-    <article class="card reveal delay-2">
-      <img class="card-photo" src="img/support.jpg" alt="Бот поддержки" />
-      <div class="card-body">
-        <h3>Бот поддержки</h3>
-        <p class="price">от 20 000 руб. · 7–10 дней</p>
-        <p>Первая линия по FAQ. Сложные обращения уходят человеку.</p>
-        <ul><li>Статус заказа и возврат</li><li>Онлайн-школа</li><li>Тарифы и передача мастеру</li></ul>
-      </div>
-    </article>
-    <article class="card reveal delay-3">
-      <img class="card-photo" src="img/booking.jpg" alt="Бот записи" />
-      <div class="card-body">
-        <h3>Бот записи</h3>
-        <p class="price">от 20 000 руб. · 7–10 дней</p>
-        <p>Клиент видит слоты, записывается сам и получает напоминание.</p>
-        <ul><li>Салон и барбершоп</li><li>Стоматология или массаж</li><li>Автосервис на час</li></ul>
-      </div>
-    </article>
-    <article class="card reveal delay-4">
-      <img class="card-photo" src="img/channel.jpg" alt="Бот для канала" />
-      <div class="card-body">
-        <h3>Бот для канала</h3>
-        <p class="price">от 15 000 руб. · 5–7 дней</p>
-        <p>Из поста сразу заявка. Вы получаете контакт и тему.</p>
-        <ul><li>Консультация из поста</li><li>Анонсы курсов</li><li>«Хочу прайс» из канала</li></ul>
-      </div>
-    </article>
-  </div>
-</section>
-
-<!-- PORTFOLIO -->
-<section id="portfolio">
-  <p class="kicker reveal">Примеры работ</p>
-  <h2 class="reveal">Портфолио</h2>
-  <p class="sub reveal">Реальные боты, запущенные для клиентов.</p>
-  <div class="portfolio-grid">
-    <div class="pcard reveal delay-1">
-      <div class="pcard-top">
-        <div class="pcard-icon">🛒</div>
-        <div>
-          <span class="pcard-tag">Бот-магазин</span>
-          <h3>Магазин одежды «Лук»</h3>
-        </div>
-      </div>
-      <p>Каталог с 30+ товарами, корзина, оплата через ЮKassa. Автосохранение корзины на 3 дня.</p>
-      <div class="pcard-chips">
-        <span class="chip">ЮKassa</span><span class="chip">Корзина</span><span class="chip">Админ-панель</span><span class="chip">Python</span>
-      </div>
-    </div>
-    <div class="pcard reveal delay-2">
-      <div class="pcard-top">
-        <div class="pcard-icon">📅</div>
-        <div>
-          <span class="pcard-tag">Бот записи</span>
-          <h3>Барбершоп «Чётк»</h3>
-        </div>
-      </div>
-      <p>3 мастера, выбор слотов, напоминание за 2 ч до визита. 120+ записей в первый месяц.</p>
-      <div class="pcard-chips">
-        <span class="chip">Слоты</span><span class="chip">Напоминания</span><span class="chip">Много мастеров</span>
-      </div>
-    </div>
-    <div class="pcard reveal delay-3">
-      <div class="pcard-top">
-        <div class="pcard-icon">🎧</div>
-        <div>
-          <span class="pcard-tag">Бот поддержки</span>
-          <h3>Онлайн-школа «Прогресс»</h3>
-        </div>
-      </div>
-      <p>FAQ по 40 вопросам, выдача домашних заданий, передача сложных вопросов куратору.</p>
-      <div class="pcard-chips">
-        <span class="chip">FAQ</span><span class="chip">Куратор</span><span class="chip">Задания</span>
-      </div>
-    </div>
-    <div class="pcard reveal delay-4">
-      <div class="pcard-top">
-        <div class="pcard-icon">📢</div>
-        <div>
-          <span class="pcard-tag">Бот для канала</span>
-          <h3>Канал по недвижимости</h3>
-        </div>
-      </div>
-      <p>Под постами кнопка «Хочу прайс», сбор заявок и связь с CRM. 80 заявок за первый месяц.</p>
-      <div class="pcard-chips">
-        <span class="chip">Кнопка под постом</span><span class="chip">CRM</span><span class="chip">Заявки</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- HOW WE WORK -->
-<section id="process">
-  <p class="kicker reveal">Процесс</p>
-  <h2 class="reveal">Как мы работаем</h2>
-  <p class="sub reveal">50% после сметы, 50% перед передачей кода.</p>
-  <div class="steps">
-    <article class="step reveal delay-1"><p class="num">01</p><h3>Анализ и ТЗ</h3><p>Разбираем задачу и фиксируем смету до старта.</p></article>
-    <article class="step reveal delay-2"><p class="num">02</p><h3>Разработка</h3><p>Собираю бота, уведомления, при необходимости ЮKassa.</p></article>
-    <article class="step reveal delay-3"><p class="num">03</p><h3>Тестирование</h3><p>Прогоняем сценарии и правим краевые случаи.</p></article>
-    <article class="step reveal delay-4"><p class="num">04</p><h3>Запуск и правки</h3><p>Исходный код и 14 дней правок после запуска.</p></article>
-  </div>
-</section>
-
-<!-- REVIEWS -->
-<section id="reviews">
-  <p class="kicker reveal">Отзывы</p>
-  <h2 class="reveal">Что говорят клиенты</h2>
-  <p class="sub reveal">Реальные отзывы о работе.</p>
-  <div class="reviews-grid">
-    <div class="rcard reveal delay-1">
-      <div class="rcard-stars">★★★★★</div>
-      <p class="rcard-text">«Заказывал бота для барбершопа. Всё сделано быстро и чётко. Записи пошли с первого дня. Отдельно ценю, что объяснялись заранее что будет делать бот»</p>
-      <div class="rcard-author">
-        <div class="rcard-avatar">Д</div>
-        <div><div class="rcard-name">Дмитрий</div><div class="rcard-role">Барбершоп, Москва</div></div>
-      </div>
-    </div>
-    <div class="rcard reveal delay-2">
-      <div class="rcard-stars">★★★★★</div>
-      <p class="rcard-text">«Бот для канала сделали за 5 дней. Заявки идут автоматически, я только отвечаю. Экономию много времени — рекомендую!»</p>
-      <div class="rcard-author">
-        <div class="rcard-avatar">М</div>
-        <div><div class="rcard-name">Марина</div><div class="rcard-role">Блогер, Telegram-канал</div></div>
-      </div>
-    </div>
-    <div class="rcard reveal delay-3">
-      <div class="rcard-stars">★★★★★</div>
-      <p class="rcard-text">«Очень довольна работой. Бот-магазин запустили в срок, получили полный код. Если будут доработки — знаю к кому обратиться.»</p>
-      <div class="rcard-author">
-        <div class="rcard-avatar">А</div>
-        <div><div class="rcard-name">Алексей</div><div class="rcard-role">Интернет-магазин</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section id="faq">
-  <p class="kicker reveal">FAQ</p>
-  <h2 class="reveal">Частые вопросы</h2>
-  <div class="faq reveal delay-1"><h3>Сколько стоит?</h3><p>Канал от 15 000 руб., поддержка и запись от 20 000 руб., магазин от 30 000 руб.</p></div>
-  <div class="faq reveal delay-2"><h3>Сроки?</h3><p>Канал 5–7 дней, поддержка и запись 7–10, магазин 10–14.</p></div>
-  <div class="faq reveal delay-3"><h3>Оплата?</h3><p>50/50: половина до старта, половина перед передачей кода — счётом через ЮKassa.</p></div>
-  <div class="faq reveal delay-4"><h3>После запуска?</h3><p>Код ваш. 14 дней правок входят в стоимость.</p></div>
-</section>
-
-</main>
-
-<footer id="contacts">
-<div class="wrap foot">
-  <div><strong style="color:var(--text)">ATELIER</strong><p>Telegram-боты для заявок, продаж и поддержки.</p></div>
-  <div><strong style="color:var(--text)">Услуги</strong>
-    <p><a href="#uslugi">Магазин</a> · <a href="#uslugi">Поддержка</a> · <a href="#uslugi">Запись</a> · <a href="#uslugi">Канал</a></p>
-  </div>
-  <div>
-    <strong style="color:var(--text)">Контакты</strong>
-    <p><a href="https://t.me/ckot_23" target="_blank">@ckot_23</a></p>
-    <p><a href="mailto:andreydragon22813@gmail.com">andreydragon22813@gmail.com</a></p>
-    <p>Отвечаю на заявку в течение рабочего дня.</p>
-  </div>
-</div>
-</footer>
 
 <script>
-// ---- SCROLL REVEAL ----
-var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
-var observer = new IntersectionObserver(function(entries) {
-  entries.forEach(function(entry) {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.12 });
-revealEls.forEach(function(el) { observer.observe(el); });
-
-// ---- FAQ ACCORDION ----
-document.querySelectorAll('.faq').forEach(function(f) {
-  f.addEventListener('click', function() {
-    var isOpen = f.classList.contains('open');
-    document.querySelectorAll('.faq').forEach(function(x) { x.classList.remove('open'); });
-    if (!isOpen) f.classList.add('open');
-  });
+document.querySelectorAll('.reveal').forEach(function(el){
+  new IntersectionObserver(function(entries,obs){
+    entries.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}
+    });
+  },{threshold:0.1}).observe(el);
+});
+// Fire immediately for elements already visible
+document.querySelectorAll('.reveal').forEach(function(el){
+  var r=el.getBoundingClientRect();
+  if(r.top<window.innerHeight)el.classList.add('visible');
 });
 </script>
 </body>
