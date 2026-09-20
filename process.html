@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ATELIER — Как происходит разработка</title>
+<link rel="icon" type="image/jpeg" href="img/preview.jpg" />
+<style>
+:root {
+  --text:#f7f1ea;--muted:rgba(247,241,234,.66);
+  --accent:#e8893a;--accent-2:#ffb067;--ink:#1a120c;
+  --line:rgba(255,196,140,.18);--surface:rgba(20,16,12,.72);
+  --max:860px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;color:var(--text);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#070706;overflow-x:hidden;
+}
+a{color:var(--accent-2);text-decoration:none;}
+button{cursor:pointer;font:inherit;}
+.bg{
+  position:fixed;inset:0;z-index:-2;
+  background:
+    radial-gradient(80% 50% at 80% 20%,rgba(232,137,58,.22),transparent 55%),
+    radial-gradient(90% 60% at 10% 90%,rgba(232,137,58,.45),transparent 50%),
+    linear-gradient(180deg,#070706 0%,#140f0c 45%,#c45c22 100%);
+  animation:bgShift 12s ease-in-out infinite alternate;
+}
+.orb{position:fixed;border-radius:50%;filter:blur(40px);pointer-events:none;z-index:-1;mix-blend-mode:screen;}
+.orb.a{width:260px;height:260px;background:rgba(255,176,103,.25);left:-60px;top:20%;animation:float 9s ease-in-out infinite;}
+.orb.b{width:320px;height:320px;background:rgba(196,92,34,.32);right:-80px;top:10%;animation:float 11s ease-in-out infinite reverse;}
+
+header{
+  position:sticky;top:0;z-index:30;
+  background:linear-gradient(180deg,rgba(7,7,6,.94),rgba(7,7,6,.55) 80%,transparent);
+  backdrop-filter:blur(14px);
+}
+.top{display:flex;align-items:center;gap:16px;padding:14px 24px;max-width:1120px;margin:0 auto;}
+.brand{display:flex;align-items:center;gap:10px;flex:1;}
+.mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(160deg,#ffb067,#e8893a);color:var(--ink);display:grid;place-items:center;font-weight:750;font-size:16px;}
+.brand strong,.brand span{display:block;}
+.brand span{font-size:12px;color:var(--muted);}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:14px;padding:8px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);transition:color .18s,border-color .18s;}
+.back-btn:hover{color:var(--text);border-color:rgba(255,176,103,.4);}
+
+.wrap{width:min(100% - 32px,var(--max));margin:0 auto;padding:40px 0 80px;}
+
+.kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-2);margin:0 0 10px;}
+h1{margin:0 0 12px;font-size:38px;line-height:1.12;}
+.lead{color:var(--muted);margin:0 0 48px;font-size:17px;max-width:52ch;}
+
+/* --- STEPS --- */
+.proc-steps{display:flex;flex-direction:column;gap:0;}
+.proc-step{
+  display:grid;grid-template-columns:48px 1fr;gap:0 20px;
+  position:relative;
+}
+.proc-step:not(:last-child)::before{
+  content:'';
+  position:absolute;
+  left:23px;top:52px;
+  width:2px;bottom:-1px;
+  background:linear-gradient(to bottom,rgba(232,137,58,.4),rgba(232,137,58,.08));
+}
+.step-num{
+  width:48px;height:48px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#ffb067,#e8893a);
+  color:var(--ink);display:grid;place-items:center;
+  font-weight:750;font-size:17px;z-index:1;
+}
+.step-body{padding:10px 0 44px;}
+.step-body h2{margin:0 0 10px;font-size:21px;line-height:1.2;}
+.step-body p{margin:0 0 10px;color:var(--muted);}
+.step-body ul{margin:8px 0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:6px;}
+.step-body li{
+  padding:10px 14px 10px 38px;border-radius:10px;
+  background:var(--surface);border:1px solid var(--line);
+  position:relative;color:var(--muted);font-size:14px;
+}
+.step-body li::before{content:"→";position:absolute;left:14px;color:var(--accent-2);font-weight:700;}
+.step-body li b{color:var(--text);}
+
+/* --- PRICES --- */
+.prices{display:grid;gap:12px;margin:14px 0;}
+.price-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:18px 20px;display:grid;gap:4px;
+  transition:border-color .2s;
+}
+.price-card:hover{border-color:rgba(255,176,103,.35);}
+.price-card .pc-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px;}
+.price-card .pc-title{font-size:16px;font-weight:650;margin-bottom:4px;}
+.price-card .pc-price{color:var(--accent-2);font-size:20px;font-weight:750;}
+.price-card .pc-time{font-size:13px;color:var(--muted);}
+.price-card .pc-desc{font-size:13px;color:var(--muted);margin-top:6px;border-top:1px solid var(--line);padding-top:8px;}
+
+/* --- PAYMENT --- */
+.payment-opts{display:grid;gap:10px;margin:14px 0;}
+.pay-opt{
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;display:flex;gap:14px;align-items:flex-start;
+}
+.pay-icon{font-size:22px;flex-shrink:0;margin-top:2px;}
+.pay-opt h3{margin:0 0 4px;font-size:15px;}
+.pay-opt p{margin:0;font-size:13px;color:var(--muted);}
+
+/* --- CALLOUT --- */
+.callout{
+  background:rgba(232,137,58,.1);border:1px solid rgba(232,137,58,.3);
+  border-radius:14px;padding:18px 20px;display:flex;gap:14px;align-items:flex-start;
+  margin:14px 0;
+}
+.callout-icon{font-size:22px;flex-shrink:0;}
+.callout p{margin:0;font-size:14px;color:var(--muted);line-height:1.6;}
+.callout p b{color:var(--text);}
+
+/* --- CTA --- */
+.cta-box{
+  background:var(--surface);border:1px solid var(--line);border-radius:16px;
+  padding:28px 24px;text-align:center;margin-top:8px;
+}
+.cta-box h2{margin:0 0 8px;font-size:24px;}
+.cta-box p{margin:0 0 20px;color:var(--muted);}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:50px;padding:0 28px;border-radius:12px;border:0;font-weight:650;font-size:15px;
+  transition:transform .18s,box-shadow .18s;
+}
+.btn:hover{transform:scale(1.04);box-shadow:0 8px 24px rgba(196,92,34,.35);}
+.btn.primary{background:linear-gradient(180deg,#ffb067,#e8893a);color:var(--ink);}
+.btn.ghost{background:var(--surface);border:1px solid var(--line);color:var(--text);margin-left:10px;}
+
+/* --- REVEAL --- */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:none;}
+.delay-1{transition-delay:.1s;}.delay-2{transition-delay:.2s;}.delay-3{transition-delay:.3s;}
+
+@keyframes bgShift{from{filter:saturate(1)}to{filter:saturate(1.15)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-24px)}}
+
+@media(min-width:640px){
+  .prices{grid-template-columns:1fr 1fr;}
+  .prices .wide{grid-column:1/-1;}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;}
+  .reveal{opacity:1;transform:none;}
+}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="orb a"></div><div class="orb b"></div>
+
+<header>
+  <div class="top">
+    <div class="brand">
+      <div class="mark">A</div>
+      <div><strong>ATELIER</strong><span>Боты Telegram на заказ</span></div>
+    </div>
+    <a class="back-btn" href="index.html">← На сайт</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <p class="kicker reveal">Процесс работы</p>
+  <h1 class="reveal">Как происходит<br />разработка бота</h1>
+  <p class="lead reveal">Прозрачно рассказываю каждый шаг — от первого звонка до получения готового бота на руки.</p>
+
+  <div class="proc-steps">
+
+    <!-- 1 -->
+    <div class="proc-step reveal">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h2>Бриф и техническое задание</h2>
+        <p>Не нужно готовить чёткое ТЗ — достаточно просто описать идею: <em>«Хочу бота для записи клиентов»</em>. Остальное выясняем вместе — задаю наводящие вопросы.</p>
+        <ul>
+          <li><b>Какая логика меню</b> — какие кнопки, куда они ведут, что видит клиент</li>
+          <li><b>Нужна ли база данных</b> — хранить пользователей, заказы, историю</li>
+          <li><b>Нужна ли оплата</b> — ЮKassa, Telegram Stars, другое</li>
+          <li><b>Нужна ли админ-панель</b> — рассылки, аналитика, выгрузка данных</li>
+        </ul>
+        <div class="callout">
+          <div class="callout-icon">📄</div>
+          <p>Итог этапа: пишу ТЗ с полным описанием сценария — <b>вы его согласовываете до старта работы</b>. Сюрпризов в финансах не будет.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="proc-step reveal">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h2>Стоимость и сроки</h2>
+        <p>Цена зависит от сложности задачи. Вот честные цифры:</p>
+        <div class="prices">
+          <div class="price-card reveal delay-1">
+            <div class="pc-label">Базовый</div>
+            <div class="pc-title">Бот-визитка, автоответ</div>
+            <div class="pc-price">3 000 — 10 000 руб.</div>
+            <div class="pc-time">— Срок: 1–3 дня</div>
+            <div class="pc-desc">Простое меню, без базы данных и оплаты</div>
+          </div>
+          <div class="price-card reveal delay-2">
+            <div class="pc-label">Средний</div>
+            <div class="pc-title">Магазин, запись, ChatGPT</div>
+            <div class="pc-price">15 000 — 45 000 руб.</div>
+            <div class="pc-time">— Срок: 5–14 дней</div>
+            <div class="pc-desc">База данных, оплата, админка, интеграции</div>
+          </div>
+          <div class="price-card reveal delay-3 wide">
+            <div class="pc-label">Сложный</div>
+            <div class="pc-title">Личный кабинет, CRM, платёжные агрегаторы</div>
+            <div class="pc-price">от 50 000 руб.</div>
+            <div class="pc-time">— Срок: от 2–3 недель</div>
+            <div class="pc-desc">Сложная логика, парсеры данных, интеграция с ERP/CRM</div>
+          </div>
+        </div>
+        <div class="callout">
+          <div class="callout-icon">✏️</div>
+          <p><b>Доработки за рамками ТЗ</b> — от 5 000 руб. за задачу. Юридический лица: чек, договор.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="proc-step reveal">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h2>Условия оплаты</h2>
+        <p>Работаем по одной из трёх схем:</p>
+        <div class="payment-opts">
+          <div class="pay-opt">
+            <div class="pay-icon">🔒</div>
+            <div>
+              <h3>Безопасная сделка на бирже</h3>
+              <p>Kwork, FL.ru, Habr Freelance — деньги резервирует сервис, разработчик получает после приёмки. Надёжнейший вариант.</p>
+            </div>
+          </div>
+          <div class="pay-opt">
+            <div class="pay-icon">🤝</div>
+            <div>
+              <h3>50 / 50</h3>
+              <p>50% до старта, 50% перед передачей готового бота. Самый распространённый формат для средних проектов.</p>
+            </div>
+          </div>
+          <div class="pay-opt">
+            <div class="pay-icon">📊</div>
+            <div>
+              <h3>Поэтапная оплата</h3>
+              <p>Проект делится на части (спринты). Подходит для крупных заказов от 50 000 руб.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="proc-step reveal">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h2>Разработка и тестирование</h2>
+        <p>Вы не смотрите в пустоту — получаете реального бота для теста.</p>
+        <ul>
+          <li>Пишу код на Python (библиотека Aiogram) — надёжно и быстро</li>
+          <li>Запускаю <b>тестового бота</b> для демонстрации — можно потыкать все кнопки</li>
+          <li>Исправляю баги и вношу правки в рамках изначального ТЗ</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="proc-step reveal">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <h2>Передача бота</h2>
+        <p>После финальной оплаты — всё переходит к вам.</p>
+        <ul>
+          <li><b>Ваш токен бота</b> — регистрируете бота через @BotFather, передаёте мне API-ключ</li>
+          <li><b>Сервер</b> — помогу выбрать и настроить VPS (от 300 руб./мес.) — бот работает 24/7</li>
+          <li><b>Исходный код</b> — передаю архив или GitHub-репозиторий, код полностью ваш</li>
+          <li><b>Инструкция</b> — показываю как пользоваться админкой, делать рассылки и перезапускать бота</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="proc-step reveal">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <h2>Гарантия и доработки</h2>
+        <ul>
+          <li><b>14 дней</b> — бесплатно исправляю скрытые баги, если вдруг что-то пошло не так</li>
+          <li><b>Новый функционал</b> — любое «а давайте добавим ещё» за рамками ТЗ — от 5 000 руб. за задачу</li>
+        </ul>
+        <div class="callout">
+          <div class="callout-icon">💡</div>
+          <p>Доработки быстрее и дешевле, если обращаетесь ко мне — проект уже знаком, не нужно разбираться с нуля.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /proc-steps -->
+
+  <!-- CTA -->
+  <div class="cta-box reveal">
+    <h2>Готовы начать?</h2>
+    <p>Оценка бесплатно — отвечу в течение рабочего дня.</p>
+    <a class="btn primary" href="order.html">Заказать бота</a>
+    <a class="btn ghost" href="https://t.me/ckot_23" target="_blank">Написать в Telegram</a>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+document.querySelectorAll('.reveal').forEach(function(el){
+  new IntersectionObserver(function(entries,obs){
+    entries.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}
+    });
+  },{threshold:0.1}).observe(el);
+});
+</script>
+</body>
+</html>
