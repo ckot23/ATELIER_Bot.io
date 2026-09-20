@@ -41,12 +41,6 @@ h1{font-size:clamp(28px,4vw,42px);line-height:1.15;margin-bottom:14px}
 /* CALLOUT */
 .callout{background:rgba(232,137,58,.1);border:1px solid rgba(232,137,58,.28);border-radius:12px;padding:14px 18px;margin:12px 0;font-size:14px}
 .callout strong{color:var(--accent-2)}
-/* PAY CARDS */
-.pay-grid{display:grid;gap:10px;margin:12px 0}
-.pay-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;backdrop-filter:blur(10px)}
-.pay-num{font-size:22px;font-weight:800;color:var(--accent-2);margin-bottom:4px}
-.pay-card h4{font-size:15px;margin-bottom:5px}
-.pay-card p{color:var(--muted);font-size:13px}
 /* CTA */
 .cta-box{background:var(--surface);border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(14px);padding:32px;text-align:center;margin-top:20px}
 .cta-box h3{font-size:22px;margin-bottom:10px}
@@ -57,7 +51,7 @@ h1{font-size:clamp(28px,4vw,42px);line-height:1.15;margin-bottom:14px}
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .6s,transform .6s}
 .reveal.visible{opacity:1;transform:none}
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
-@media(min-width:560px){.pay-grid{grid-template-columns:1fr 1fr 1fr}}
+
 </style>
 </head>
 <body>
@@ -87,7 +81,7 @@ h1{font-size:clamp(28px,4vw,42px);line-height:1.15;margin-bottom:14px}
           <li>Нужна ли интеграция — Google Таблицы, CRM, оплата?</li>
           <li>Нужна ли панель управления — рассылки, статистика?</li>
         </ul>
-        <p style="margin-top:10px"><strong>Итог:</strong> я составляю чёткое ТЗ и согласовываю его с вами. Никаких сюрпризов в процессе.</strong></p>
+        <p style="margin-top:10px"><strong>Итог:</strong> я составляю чёткое ТЗ и согласовываю его с вами. Никаких сюрпризов в процессе.</p>
       </div>
     </div>
 
@@ -109,33 +103,8 @@ h1{font-size:clamp(28px,4vw,42px);line-height:1.15;margin-bottom:14px}
       </div>
     </div>
 
-    <div class="stage-item reveal d2">
-      <div class="s-left"><div class="stage-num">3</div><div class="stage-line"></div></div>
-      <div class="stage-body">
-        <h2>Договариваемся об оплате</h2>
-        <p>Работаю по одной из трёх схем — выбираете ту, которая удобна:</p>
-        <div class="pay-grid">
-          <div class="pay-card"><div class="pay-num">50/50</div><h4>Предоплата</h4><p>Половина до старта, половина после демо. Самый популярный вариант.</p></div>
-          <div class="pay-card"><div class="pay-num">🔒</div><h4>Биржа</h4><p>Kwork или FL.ru — деньги резервирует сервис, я получаю только после вашего подтверждения.</p></div>
-          <div class="pay-card"><div class="pay-num">📦</div><h4>По этапам</h4><p>Для крупных проектов — оплата поэтапно по мере готовности модулей.</p></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="stage-item reveal d3">
-      <div class="s-left"><div class="stage-num">4</div><div class="stage-line"></div></div>
-      <div class="stage-body">
-        <h2>Разработка и тестирование</h2>
-        <p>Пишу бота на Python (Aiogram). Вы не ждёте в тишине — отправляю промежуточные результаты.</p>
-        <ul>
-          <li><strong>Тестовый бот:</strong> перед сдачей вы получаете ссылку и проверяете всё сами.</li>
-          <li><strong>Правки:</strong> всё что было в ТЗ — бесплатно. Новые идеи «а давайте ещё добавим...» — оцениваю отдельно.</li>
-        </ul>
-      </div>
-    </div>
-
     <div class="stage-item reveal">
-      <div class="s-left"><div class="stage-num">5</div><div class="stage-line"></div></div>
+      <div class="s-left"><div class="stage-num">3</div><div class="stage-line"></div></div>
       <div class="stage-body">
         <h2>Передача бота вам</h2>
         <ul>
@@ -148,7 +117,7 @@ h1{font-size:clamp(28px,4vw,42px);line-height:1.15;margin-bottom:14px}
     </div>
 
     <div class="stage-item reveal d1">
-      <div class="s-left"><div class="stage-num">6</div></div>
+      <div class="s-left"><div class="stage-num">4</div></div>
       <div class="stage-body">
         <h2>Гарантия и поддержка</h2>
         <ul>
