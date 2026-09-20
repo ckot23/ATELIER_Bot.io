@@ -111,6 +111,32 @@ h2{font-size:clamp(22px,3.5vw,32px);line-height:1.2;margin-bottom:12px}
 .rv-form .rv-row input{margin-bottom:0;flex:1}
 .rv-form .rv-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;margin-top:2px}
 .rv-thanks{color:var(--accent-2);font-size:14px;margin-top:10px;display:none}
+
+/* ORBIT — Telegram с сообщениями-спутниками */
+.orbit-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:28px;align-items:center}
+.os-stage{position:relative;height:400px;user-select:none}
+.os-ring{position:absolute;left:50%;top:50%;border:1px solid rgba(255,176,103,.13);border-radius:50%;transform:translate(-50%,-50%)}
+.os-ring.r1{width:84%;height:60%}
+.os-ring.r2{width:62%;height:43%;border-style:dashed;border-color:rgba(255,176,103,.08)}
+.os-core{position:absolute;left:50%;top:50%;width:104px;height:104px;border-radius:50%;background:linear-gradient(150deg,#ffb067,#e8893a 55%,#c45c22);display:grid;place-items:center;box-shadow:0 0 42px rgba(232,137,58,.55),0 0 95px rgba(232,137,58,.25),inset 0 2px 8px rgba(255,255,255,.25);z-index:4;animation:coreFloat 5s ease-in-out infinite}
+.os-core svg{width:50px;height:50px;fill:#fff;filter:drop-shadow(0 2px 5px rgba(0,0,0,.3));transform:translate(2px,1px) rotate(-6deg)}
+.os-pulse{position:absolute;left:50%;top:50%;width:104px;height:104px;border-radius:50%;border:2px solid rgba(255,176,103,.55);transform:translate(-50%,-50%);animation:osPulse 2.8s ease-out infinite;z-index:3}
+.os-pulse.p2{animation-delay:1.4s}
+@keyframes osPulse{0%{transform:translate(-50%,-50%) scale(1);opacity:.65}100%{transform:translate(-50%,-50%) scale(2.3);opacity:0}}
+@keyframes coreFloat{0%,100%{transform:translate(calc(-50% + 0px),calc(-50% - 5px))}50%{transform:translate(calc(-50% + 0px),calc(-50% + 7px))}}
+.s-chip{position:absolute;left:0;top:0;background:rgba(30,24,17,.95);border:1px solid var(--line);border-radius:14px;padding:8px 13px;font-size:12.5px;color:var(--text);white-space:nowrap;box-shadow:0 10px 24px rgba(0,0,0,.5);will-change:transform,opacity,filter;pointer-events:none;backdrop-filter:blur(4px)}
+@media(max-width:640px){
+  .orbit-grid{grid-template-columns:1fr;gap:14px}
+  .os-stage{height:330px}
+  .s-chip{font-size:11px;padding:6px 10px}
+  .os-core{width:86px;height:86px}
+  .os-pulse{width:86px;height:86px}
+  .os-core svg{width:42px;height:42px}
+}
+@media (prefers-reduced-motion:reduce){
+  .os-core,.os-pulse{animation:none!important}
+  .os-pulse{display:none}
+}
 </style>
 </head>
 <body>
@@ -153,6 +179,35 @@ h2{font-size:clamp(22px,3.5vw,32px);line-height:1.2;margin-bottom:12px}
       <div class="stat"><b>1–14 дней</b><span>Срок</span></div>
       <div class="stat"><b>14 дней</b><span>Гарантия</span></div>
       <div class="stat"><b>Код ваш</b><span>Передаю полностью</span></div>
+    </div>
+  </section>
+
+  <!-- LIVE ORBIT -->
+  <section id="live">
+    <div class="orbit-grid">
+      <div class="reveal">
+        <p class="kicker">Бот на связи 24/7</p>
+        <h2>Пока вы заняты — бот общается с клиентами</h2>
+        <p class="sub">Записывает на услуги, отвечает на вопросы, принимает оплату и напоминает о визитах. Даже ночью и в выходные.</p>
+        <a class="btn ghost" href="order.html">Обсудить моего бота</a>
+      </div>
+      <div class="os-stage reveal delay-2" id="osStage" aria-hidden="true">
+        <div class="os-ring r1"></div>
+        <div class="os-ring r2"></div>
+        <div class="os-pulse"></div>
+        <div class="os-pulse p2"></div>
+        <div class="os-core">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </div>
+        <span class="s-chip">📅 Запись: суббота, 15:00 ✔</span>
+        <span class="s-chip">🔥 Хочу прайс!</span>
+        <span class="s-chip">💳 Оплата прошла ✓</span>
+        <span class="s-chip">🔔 Напоминание: завтра в 12:00</span>
+        <span class="s-chip">⭐ Оцените визит: 5/5</span>
+        <span class="s-chip">🛒 Новый заказ № 128</span>
+        <span class="s-chip">👋 Здравствуйте! Чем помочь?</span>
+        <span class="s-chip">📊 3 новые заявки за день</span>
+      </div>
     </div>
   </section>
 
@@ -390,6 +445,40 @@ function submitRv(e){
 }
 document.addEventListener('DOMContentLoaded',loadRv);
 
+// ORBIT — сообщения-спутники вокруг значка Telegram
+(function(){
+  var stage=document.getElementById('osStage');
+  if(!stage)return;
+  var chips=[].slice.call(stage.querySelectorAll('.s-chip'));
+  var n=chips.length;
+  if(!n)return;
+  var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function place(t){
+    var w=stage.clientWidth,h=stage.clientHeight;
+    var rx=Math.min(w*0.44,330), ry=h*0.30;
+    var cx=w/2, cy=h/2;
+    for(var i=0;i<n;i++){
+      var a=(i/n)*Math.PI*2+t*0.30;
+      var x=cx+rx*Math.cos(a), y=cy+ry*Math.sin(a);
+      var depth=(Math.sin(a)+1)/2;           /* 0 = за иконкой, 1 = перед */
+      chips[i].style.transform='translate3d('+x+'px,'+y+'px,0) translate(-50%,-50%) scale('+(0.6+0.45*depth).toFixed(3)+')';
+      chips[i].style.opacity=(0.30+0.70*depth).toFixed(2);
+      chips[i].style.zIndex=depth>0.5?(5+Math.round(depth*5)):2;
+      chips[i].style.filter=depth<0.32?'blur(1.6px)':'none';
+    }
+  }
+  if(reduced){place(0.4);return;}
+  var start=performance.now(), rafId=null;
+  function loop(now){place((now-start)/1000);rafId=requestAnimationFrame(loop);}
+  place(0);
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(e){
+      if(e[0].isIntersecting){if(!rafId)rafId=requestAnimationFrame(loop);}
+      else if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+    },{threshold:0}).observe(stage);
+  }else{rafId=requestAnimationFrame(loop);}
+  window.addEventListener('resize',function(){place(0);});
+})();
 </script>
 </body>
 </html>
