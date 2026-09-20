@@ -34,6 +34,7 @@ button{cursor:pointer;}
 .orb{position:fixed;border-radius:50%;filter:blur(40px);pointer-events:none;z-index:-1;mix-blend-mode:screen;}
 .orb.a{width:280px;height:280px;background:rgba(255,176,103,.28);left:-60px;top:20%;animation:float 9s ease-in-out infinite;}
 .orb.b{width:360px;height:360px;background:rgba(196,92,34,.35);right:-80px;top:8%;animation:float 11s ease-in-out infinite reverse;}
+
 header{
   position:sticky;top:0;z-index:30;
   background:linear-gradient(180deg,rgba(7,7,6,.94),rgba(7,7,6,.55) 80%,transparent);
@@ -41,63 +42,134 @@ header{
 }
 .top{display:flex;align-items:center;gap:16px;padding:14px 24px;max-width:var(--max);margin:0 auto;width:100%;}
 .brand{display:flex;align-items:center;gap:10px;flex:1;}
-.mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(160deg,#ffb067,#e8893a);color:var(--ink);display:grid;place-items:center;font-weight:750;}
+.mark{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(160deg,#ffb067,#e8893a);
+  color:var(--ink);display:grid;place-items:center;font-weight:750;
+}
 .brand strong,.brand span{display:block;}
 .brand span{font-size:12px;color:var(--muted);}
-.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:14px;padding:8px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);transition:color .18s,border-color .18s;}
+.back-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  color:var(--muted);font-size:14px;padding:8px 14px;
+  border-radius:10px;border:1px solid var(--line);
+  background:var(--surface);transition:color .18s,border-color .18s;
+}
 .back-btn:hover{color:var(--text);border-color:rgba(255,176,103,.4);}
-main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px 60px;}
-.order-wrap{width:100%;max-width:620px;}
+
+main{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:40px 24px 60px;
+}
+.order-wrap{
+  width:100%;max-width:620px;
+}
 .order-wrap .kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-2);margin:0 0 10px;}
 .order-wrap h1{margin:0 0 8px;font-size:32px;line-height:1.15;}
 .order-wrap .sub{margin:0 0 32px;color:var(--muted);}
-.order-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(16px);padding:32px;}
-.step-indicator{display:flex;align-items:center;gap:8px;margin-bottom:28px;}
-.si-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);}
-.si-dot{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:12px;font-weight:700;transition:all .3s;}
+
+.order-card{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:18px;backdrop-filter:blur(16px);padding:32px;
+}
+
+.step-indicator{
+  display:flex;align-items:center;gap:8px;margin-bottom:28px;
+}
+.si-item{
+  display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);
+}
+.si-dot{
+  width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);
+  display:grid;place-items:center;font-size:12px;font-weight:700;
+  transition:all .3s;
+}
 .si-item.active .si-dot{background:var(--accent);border-color:var(--accent);color:var(--ink);}
 .si-item.done .si-dot{background:rgba(232,137,58,.2);border-color:var(--accent);color:var(--accent-2);}
 .si-line{flex:1;height:1px;background:var(--line);}
+
 .form-step{display:none;}
 .form-step.active{display:block;}
+
 .field{margin-bottom:18px;}
 label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;}
-input,textarea,select{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:13px 14px;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s;}
-input:focus,textarea:focus{border-color:rgba(232,137,58,.6);box-shadow:0 0 0 3px rgba(232,137,58,.12);}
+input,textarea,select{
+  width:100%;background:rgba(255,255,255,.05);
+  border:1px solid var(--line);border-radius:10px;padding:13px 14px;
+  color:var(--text);outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+input:focus,textarea:focus,select:focus{
+  border-color:rgba(232,137,58,.6);
+  box-shadow:0 0 0 3px rgba(232,137,58,.12);
+}
+select option{background:#1a120c;}
 textarea{min-height:120px;resize:vertical;}
-.bot-types{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;}
-.type-card{border:1.5px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;transition:border-color .2s,background .2s;background:rgba(255,255,255,.03);}
+
+.bot-types{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  margin-bottom:6px;
+}
+.type-card{
+  border:1.5px solid var(--line);border-radius:12px;padding:14px;
+  cursor:pointer;transition:border-color .2s,background .2s;
+  background:rgba(255,255,255,.03);
+}
 .type-card:hover{border-color:rgba(232,137,58,.4);background:rgba(232,137,58,.05);}
 .type-card.selected{border-color:var(--accent);background:rgba(232,137,58,.12);}
 .type-card input[type=radio]{display:none;}
 .type-card .tc-icon{font-size:22px;margin-bottom:6px;}
 .type-card .tc-name{font-size:14px;font-weight:600;margin-bottom:2px;}
 .type-card .tc-price{font-size:12px;color:var(--accent-2);}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 24px;border-radius:12px;border:0;font-weight:650;font-size:15px;transition:transform .18s,box-shadow .18s;cursor:pointer;width:100%;}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:50px;padding:0 24px;border-radius:12px;border:0;font-weight:650;font-size:15px;
+  transition:transform .18s,box-shadow .18s;
+  cursor:pointer;width:100%;
+}
 .btn:hover{transform:scale(1.02);box-shadow:0 8px 24px rgba(196,92,34,.35);}
 .btn.primary{background:linear-gradient(180deg,var(--accent-2),var(--accent));color:var(--ink);}
 .btn.ghost{background:var(--surface);border:1px solid var(--line);color:var(--text);}
 .btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+
 .btn-row{display:flex;gap:10px;margin-top:24px;}
 .btn-row .btn.ghost{width:auto;padding:0 20px;}
-.ok{display:none;text-align:center;padding:20px 0;}
+
+.ok{
+  display:none;text-align:center;padding:20px 0;
+}
 .ok.show{display:block;}
 .ok-icon{font-size:52px;margin-bottom:16px;}
 .ok h2{margin:0 0 8px;}
 .ok p{color:var(--muted);margin:0;}
+
 .err{display:none;color:#ff6b6b;font-size:14px;margin-top:8px;}
 .err.show{display:block;}
-.trust-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;justify-content:center;}
-.trust-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);}
+
+.trust-row{
+  display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;
+  justify-content:center;
+}
+.trust-item{
+  display:flex;align-items:center;gap:6px;
+  font-size:13px;color:var(--muted);
+}
 .trust-item::before{content:"✓";color:var(--accent-2);font-weight:700;}
+
 @keyframes bgShift{from{filter:saturate(1)}to{filter:saturate(1.15)}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-28px)}}
-@media(max-width:540px){.bot-types{grid-template-columns:1fr;}.order-card{padding:20px;}}
+
+@media(max-width:540px){
+  .bot-types{grid-template-columns:1fr;}
+  .order-card{padding:20px;}
+}
 </style>
 </head>
 <body>
 <div class="bg"></div>
 <div class="orb a"></div><div class="orb b"></div>
+
 <header>
 <div class="top">
   <div class="brand">
@@ -107,36 +179,71 @@ textarea{min-height:120px;resize:vertical;}
   <a class="back-btn" href="index.html">← На сайт</a>
 </div>
 </header>
+
 <main>
 <div class="order-wrap">
   <p class="kicker">Заявка</p>
   <h1>Оставьте заявку</h1>
   <p class="sub">Оценка бесплатно. Отвечу в течение рабочего дня.</p>
+
   <div class="order-card">
+
+    <!-- Step indicator -->
     <div class="step-indicator">
-      <div class="si-item active" id="si1"><div class="si-dot">1</div><span>Тип бота</span></div>
+      <div class="si-item active" id="si1">
+        <div class="si-dot">1</div>
+        <span>Тип бота</span>
+      </div>
       <div class="si-line"></div>
-      <div class="si-item" id="si2"><div class="si-dot">2</div><span>Задача</span></div>
+      <div class="si-item" id="si2">
+        <div class="si-dot">2</div>
+        <span>Задача</span>
+      </div>
       <div class="si-line"></div>
-      <div class="si-item" id="si3"><div class="si-dot">3</div><span>Контакт</span></div>
+      <div class="si-item" id="si3">
+        <div class="si-dot">3</div>
+        <span>Контакт</span>
+      </div>
     </div>
-    <!-- Step 1 -->
+
+    <!-- Step 1: bot type -->
     <div class="form-step active" id="step1">
       <p style="margin:0 0 14px;font-weight:600">Какой бот вам нужен?</p>
       <div class="bot-types">
-        <label class="type-card"><input type="radio" name="botType" value="Бот для канала" /><div class="tc-icon">📢</div><div class="tc-name">Для канала</div><div class="tc-price">от 15 000 руб.</div></label>
-        <label class="type-card"><input type="radio" name="botType" value="Бот поддержки" /><div class="tc-icon">🎧</div><div class="tc-name">Поддержка</div><div class="tc-price">от 20 000 руб.</div></label>
-        <label class="type-card"><input type="radio" name="botType" value="Бот записи" /><div class="tc-icon">📅</div><div class="tc-name">Запись</div><div class="tc-price">от 20 000 руб.</div></label>
-        <label class="type-card"><input type="radio" name="botType" value="Бот-магазин" /><div class="tc-icon">🛒</div><div class="tc-name">Магазин</div><div class="tc-price">от 30 000 руб.</div></label>
+        <label class="type-card" id="tc-channel">
+          <input type="radio" name="botType" value="Бот для канала" />
+          <div class="tc-icon">📢</div>
+          <div class="tc-name">Для канала</div>
+          <div class="tc-price">от 15 000 руб.</div>
+        </label>
+        <label class="type-card" id="tc-support">
+          <input type="radio" name="botType" value="Бот поддержки" />
+          <div class="tc-icon">🎧</div>
+          <div class="tc-name">Поддержка</div>
+          <div class="tc-price">от 20 000 руб.</div>
+        </label>
+        <label class="type-card" id="tc-booking">
+          <input type="radio" name="botType" value="Бот записи" />
+          <div class="tc-icon">📅</div>
+          <div class="tc-name">Запись</div>
+          <div class="tc-price">от 20 000 руб.</div>
+        </label>
+        <label class="type-card" id="tc-shop">
+          <input type="radio" name="botType" value="Бот-магазин" />
+          <div class="tc-icon">🛒</div>
+          <div class="tc-name">Магазин</div>
+          <div class="tc-price">от 30 000 руб.</div>
+        </label>
       </div>
       <p class="err" id="err1">Пожалуйста, выберите тип бота.</p>
       <div class="btn-row"><button class="btn primary" onclick="goStep(2)">Далее →</button></div>
     </div>
-    <!-- Step 2 -->
+
+    <!-- Step 2: task -->
     <div class="form-step" id="step2">
       <div class="field">
         <label for="task">Опишите задачу</label>
-        <textarea id="task" placeholder="Сфера бизнеса, цель бота, что должно работать"></textarea>
+        <textarea id="task" placeholder="Коротко: сфера бизнеса, цель бота, что должно работать"></textarea>
       </div>
       <p class="err" id="err2">Пожалуйста, опишите задачу.</p>
       <div class="btn-row">
@@ -144,7 +251,8 @@ textarea{min-height:120px;resize:vertical;}
         <button class="btn primary" onclick="goStep(3)">Далее →</button>
       </div>
     </div>
-    <!-- Step 3 -->
+
+    <!-- Step 3: contact -->
     <div class="form-step" id="step3">
       <div class="field">
         <label for="contact">Ваш Telegram</label>
@@ -157,6 +265,7 @@ textarea{min-height:120px;resize:vertical;}
         <button class="btn primary" id="submitBtn" onclick="submitForm()">Отправить заявку</button>
       </div>
     </div>
+
     <!-- Success -->
     <div class="ok" id="ok">
       <div class="ok-icon">✅</div>
@@ -164,7 +273,9 @@ textarea{min-height:120px;resize:vertical;}
       <p>Напишу в Telegram в течение рабочего дня.<br>Или <a href="https://t.me/ckot_23">@ckot_23</a> напрямую.</p>
       <a href="index.html" class="btn ghost" style="margin-top:24px;width:auto;padding:0 24px">Вернуться на сайт</a>
     </div>
-  </div>
+
+  </div><!-- /order-card -->
+
   <div class="trust-row">
     <span class="trust-item">Оценка бесплатно</span>
     <span class="trust-item">Отвечу за день</span>
@@ -173,39 +284,39 @@ textarea{min-height:120px;resize:vertical;}
   </div>
 </div>
 </main>
-<script>
-// !! ЗАМЕНИТЕ на URL вашего Cloudflare Worker после деплоя !!
-var WORKER_URL = 'https://atelier-order.YOUR_SUBDOMAIN.workers.dev';
 
+<script>
 var TG_TOKEN   = '8943280869:AAHFxKGh5R-jYh0OJot5xOoPp_nbt7E04pk';
 var TG_CHAT_ID = '7114829971';
 var currentStep = 1;
 
+// Type card selection
 document.querySelectorAll('.type-card').forEach(function(card) {
   card.addEventListener('click', function() {
-    document.querySelectorAll('.type-card').forEach(function(c){c.classList.remove('selected');});
+    document.querySelectorAll('.type-card').forEach(function(c) { c.classList.remove('selected'); });
     card.classList.add('selected');
     card.querySelector('input').checked = true;
   });
 });
 
 function goStep(n) {
+  // Validate current
   if (n > currentStep) {
     if (currentStep === 1) {
-      if (!document.querySelector('input[name="botType"]:checked')) {
-        document.getElementById('err1').classList.add('show'); return;
-      }
+      var sel = document.querySelector('input[name="botType"]:checked');
+      if (!sel) { document.getElementById('err1').classList.add('show'); return; }
       document.getElementById('err1').classList.remove('show');
     }
     if (currentStep === 2) {
-      if (!document.getElementById('task').value.trim()) {
-        document.getElementById('err2').classList.add('show'); return;
-      }
+      var task = document.getElementById('task').value.trim();
+      if (!task) { document.getElementById('err2').classList.add('show'); return; }
       document.getElementById('err2').classList.remove('show');
     }
   }
-  document.querySelectorAll('.form-step').forEach(function(s){s.classList.remove('active');});
+  // Hide all steps
+  document.querySelectorAll('.form-step').forEach(function(s) { s.classList.remove('active'); });
   document.getElementById('step' + n).classList.add('active');
+  // Update indicators
   for (var i = 1; i <= 3; i++) {
     var si = document.getElementById('si' + i);
     si.classList.remove('active','done');
@@ -224,28 +335,26 @@ function submitForm() {
   var task    = document.getElementById('task').value.trim();
   var btn     = document.getElementById('submitBtn');
 
+  var text = 'Новая заявка с сайта ATELIER' + '\n\n'
+           + 'Тип бота: ' + kind + '\n'
+           + 'Задача: ' + task + '\n'
+           + 'Telegram клиента: ' + contact;
+
   btn.disabled = true;
   btn.textContent = 'Отправляем...';
 
-  // 1. Отправка в Telegram
-  var tgText = 'Новая заявка с сайта ATELIER\n\nТип: ' + kind + '\nЗадача: ' + task + '\nTelegram: ' + contact;
   fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
-    method: 'POST', headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: tgText })
-  });
-
-  // 2. Отправка в Notion через Worker
-  fetch(WORKER_URL, {
-    method: 'POST', headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ client: contact, botType: kind, task: task })
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: text })
   })
-  .then(function(r){ return r.json(); })
+  .then(function(r) { return r.json(); })
   .then(function(data) {
     if (data.ok) {
       document.querySelectorAll('.form-step').forEach(function(s){s.classList.remove('active');});
       document.querySelector('.step-indicator').style.display = 'none';
       document.getElementById('ok').classList.add('show');
-    } else { throw new Error(data.error); }
+    } else { throw new Error(data.description); }
   })
   .catch(function() {
     btn.disabled = false;
