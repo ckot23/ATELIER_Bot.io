@@ -52,7 +52,7 @@ h2{font-size:clamp(22px,3.5vw,32px);line-height:1.2;margin-bottom:12px}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;backdrop-filter:blur(12px);transition:border-color .2s,transform .2s}
 .card:hover{border-color:rgba(255,176,103,.35);transform:translateY(-2px)}
-.card-photo{width:100%;height:180px;object-fit:cover;display:block;background:#1a120c}
+.card-photo{width:100%;height:200px;object-fit:cover;display:block;background:#1a120c}
 .card-body{padding:20px}
 .card-body h3{font-size:18px;margin-bottom:6px}
 .price{color:var(--accent-2);font-weight:700;font-size:15px;margin-bottom:10px}
@@ -62,6 +62,7 @@ h2{font-size:clamp(22px,3.5vw,32px);line-height:1.2;margin-bottom:12px}
 /* PORTFOLIO */
 .portfolio-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .pcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;backdrop-filter:blur(10px)}
+.pcard-photo{width:100%;height:160px;object-fit:cover;display:block}
 .pcard-top{padding:18px 18px 0}
 .pcard-top h3{font-size:16px;margin-bottom:6px}
 .pcard-top p{font-size:13px;color:var(--muted);margin-bottom:12px}
@@ -100,6 +101,16 @@ h2{font-size:clamp(22px,3.5vw,32px);line-height:1.2;margin-bottom:12px}
   .grid-2,.portfolio-grid,.reviews-grid{grid-template-columns:1fr}
   nav{display:none}
 }
+
+.rv-form{background:rgba(232,137,58,.07);border:1px dashed rgba(232,137,58,.3);border-radius:16px;padding:24px;backdrop-filter:blur(8px);margin-top:16px}
+.rv-form .rv-kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-2);margin-bottom:14px}
+.rv-form input,.rv-form textarea,.rv-form select{width:100%;background:rgba(10,9,8,.85);border:1px solid var(--line);border-radius:10px;padding:10px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none;box-sizing:border-box;margin-bottom:10px;transition:border-color .2s}
+.rv-form input:focus,.rv-form textarea:focus{border-color:rgba(255,176,103,.5)}
+.rv-form textarea{resize:vertical;min-height:80px}
+.rv-form .rv-row{display:flex;gap:8px}
+.rv-form .rv-row input{margin-bottom:0;flex:1}
+.rv-form .rv-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;margin-top:2px}
+.rv-thanks{color:var(--accent-2);font-size:14px;margin-top:10px;display:none}
 </style>
 </head>
 <body>
@@ -109,7 +120,6 @@ h2{font-size:clamp(22px,3.5vw,32px);line-height:1.2;margin-bottom:12px}
 <header>
   <div class="top">
     <div class="brand">
-      <div class="mark">A</div>
       <div class="brand-text"><strong>ATELIER</strong><span>Боты Telegram на заказ</span></div>
     </div>
     <nav>
@@ -126,6 +136,10 @@ h2{font-size:clamp(22px,3.5vw,32px);line-height:1.2;margin-bottom:12px}
 <div class="wrap">
 
   <!-- HERO -->
+  <!-- HERO VISUAL -->
+  <div style="width:100%;border-radius:18px;overflow:hidden;margin-bottom:48px;border:1px solid var(--line)">
+    <img src="photos/hero.jpg" alt="Telegram боты на заказ" style="width:100%;display:block;object-fit:cover;max-height:320px">
+  </div>
   <section style="padding-top:32px">
     <p class="kicker reveal">Разработка Telegram-ботов</p>
     <h1 class="reveal">Бот, который работает<br>на ваш бизнес</h1>
@@ -165,16 +179,16 @@ h2{font-size:clamp(22px,3.5vw,32px);line-height:1.2;margin-bottom:12px}
     <p class="sub reveal">Четыре готовых сборки. Цены фиксируются до старта.</p>
     <div class="grid-2">
       <article class="card reveal delay-1">
-        <div class="card-photo" style="background:linear-gradient(135deg,#1a0e08,#3a1f0e);display:flex;align-items:center;justify-content:center;font-size:52px">🛒</div>
+        <img src="photos/card-shop.jpg" alt="Бот-магазин Telegram" class="card-photo">
         <div class="card-body">
           <h3>Бот-магазин</h3>
           <p class="price">от 30 000 руб. · 10–14 дней</p>
-          <p>Каталог, корзина и оплата ЮKassa / СБП прямо в Telegram.</p>
+          <p>Каталог, корзина и онлайн-оплата прямо в Telegram.</p>
           <ul><li>Магазин одежды или мерча</li><li>Доставка еды</li><li>Цифровые товары после оплаты</li></ul>
         </div>
       </article>
       <article class="card reveal delay-2">
-        <div class="card-photo" style="background:linear-gradient(135deg,#0e1a10,#1f3a1e);display:flex;align-items:center;justify-content:center;font-size:52px">🎧</div>
+        <img src="photos/card-support.jpg" alt="Бот поддержки Telegram" class="card-photo">
         <div class="card-body">
           <h3>Бот поддержки</h3>
           <p class="price">от 20 000 руб. · 7–10 дней</p>
@@ -183,7 +197,7 @@ h2{font-size:clamp(22px,3.5vw,32px);line-height:1.2;margin-bottom:12px}
         </div>
       </article>
       <article class="card reveal delay-3">
-        <div class="card-photo" style="background:linear-gradient(135deg,#0e0e1a,#1e1f3a);display:flex;align-items:center;justify-content:center;font-size:52px">📅</div>
+        <img src="photos/card-booking.jpg" alt="Бот записи Telegram" class="card-photo">
         <div class="card-body">
           <h3>Бот записи</h3>
           <p class="price">от 15 000 руб. · 5–10 дней</p>
@@ -192,7 +206,7 @@ h2{font-size:clamp(22px,3.5vw,32px);line-height:1.2;margin-bottom:12px}
         </div>
       </article>
       <article class="card reveal delay-4">
-        <div class="card-photo" style="background:linear-gradient(135deg,#1a100e,#3a1e1a);display:flex;align-items:center;justify-content:center;font-size:52px">📢</div>
+        <img src="photos/card-channel.jpg" alt="Бот для канала Telegram" class="card-photo">
         <div class="card-body">
           <h3>Бот для канала</h3>
           <p class="price">от 25 000 руб. · 5–7 дней</p>
@@ -210,6 +224,7 @@ h2{font-size:clamp(22px,3.5vw,32px);line-height:1.2;margin-bottom:12px}
     <p class="sub reveal">Реальные боты, запущенные для клиентов.</p>
     <div class="portfolio-grid">
       <div class="pcard reveal delay-1">
+        <img src="photos/portfolio-barber.jpg" alt="Бот записи в барбершоп" class="pcard-photo">
         <div class="pcard-top">
           <h3>Запись в барбершоп</h3>
           <p>Клиент выбирает мастера, услугу и время — без звонков. Приходит напоминание за час.</p>
@@ -218,14 +233,16 @@ h2{font-size:clamp(22px,3.5vw,32px);line-height:1.2;margin-bottom:12px}
         <div class="pcard-bot"><div class="tg-icon">✂️</div><span>Срок: 7 дней · 18 000 руб.</span></div>
       </div>
       <div class="pcard reveal delay-2">
+        <img src="photos/portfolio-merch.jpg" alt="Бот-магазин мерча" class="pcard-photo">
         <div class="pcard-top">
           <h3>Магазин мерча</h3>
-          <p>Каталог с фото, выбор размера, оплата ЮKassa, уведомление менеджеру и клиенту.</p>
-          <div class="pcard-tags"><span class="tag">Магазин</span><span class="tag">ЮKassa</span><span class="tag">Каталог</span></div>
+          <p>Каталог с фото, выбор размера, онлайн-оплата, уведомление менеджеру и клиенту.</p>
+          <div class="pcard-tags"><span class="tag">Магазин</span><span class="tag">Каталог</span></div>
         </div>
         <div class="pcard-bot"><div class="tg-icon">👕</div><span>Срок: 12 дней · 34 000 руб.</span></div>
       </div>
       <div class="pcard reveal delay-3">
+        <img src="photos/portfolio-channel.jpg" alt="Бот для канала" class="pcard-photo">
         <div class="pcard-top">
           <h3>Заявки из Telegram-канала</h3>
           <p>Кнопка под постом → бот собирает имя и телефон → заявка в Google Таблицу.</p>
@@ -234,6 +251,7 @@ h2{font-size:clamp(22px,3.5vw,32px);line-height:1.2;margin-bottom:12px}
         <div class="pcard-bot"><div class="tg-icon">📢</div><span>Срок: 5 дней · 26 000 руб.</span></div>
       </div>
       <div class="pcard reveal delay-4">
+        <img src="photos/portfolio-school.jpg" alt="Бот поддержки онлайн-школы" class="pcard-photo">
         <div class="pcard-top">
           <h3>Поддержка клиентов онлайн-школы</h3>
           <p>FAQ по курсам, статус доступа, передача сложных вопросов куратору.</p>
@@ -251,7 +269,6 @@ h2{font-size:clamp(22px,3.5vw,32px);line-height:1.2;margin-bottom:12px}
         <p class="kicker reveal">Отзывы</p>
         <h2 class="reveal">Что говорят клиенты</h2>
       </div>
-      <a class="btn ghost reveal" href="https://t.me/" target="_blank" rel="noopener">✍️ Оставить отзыв</a>
     </div>
     <div class="reviews-grid">
       <div class="review reveal delay-1">
@@ -278,11 +295,27 @@ h2{font-size:clamp(22px,3.5vw,32px);line-height:1.2;margin-bottom:12px}
         <div class="stars">★★★★★</div>
         <p>«Бот для канала запустили за 5 дней. Из каждого поста теперь идут заявки. Рекомендую.»</p>
       </div>
-      <div class="review-cta reveal delay-4">
-        <p>Работали вместе? Оставьте отзыв — это помогает другим клиентам принять решение.</p>
-        <a class="btn primary" href="https://t.me/" target="_blank" rel="noopener">✍️ Оставить отзыв</a>
-      </div>
     </div>
+  <div class="rv-form reveal">
+    <p class="rv-kicker">Оставить отзыв</p>
+    <form id="rvForm" onsubmit="submitRv(event)">
+      <div class="rv-row">
+        <input id="rvName" type="text" placeholder="Ваше имя" required>
+        <input id="rvDesc" type="text" placeholder="Компания / сфера">
+      </div>
+      <span class="rv-label">Оценка</span>
+      <select id="rvStars" style="margin-top:0">
+        <option value="5">★★★★★ — Отлично</option>
+        <option value="4">★★★★☆ — Хорошо</option>
+        <option value="3">★★★☆☆ — Нормально</option>
+        <option value="2">★★☆☆☆ — Плохо</option>
+        <option value="1">★☆☆☆☆ — Ужасно</option>
+      </select>
+      <textarea id="rvText" placeholder="Ваш отзыв..." required></textarea>
+      <button type="submit" class="btn primary">Опубликовать отзыв</button>
+    </form>
+    <p class="rv-thanks" id="rvThanks">✅ Спасибо! Отзыв опубликован.</p>
+  </div>
   </section>
 
   <!-- FAQ -->
@@ -292,7 +325,6 @@ h2{font-size:clamp(22px,3.5vw,32px);line-height:1.2;margin-bottom:12px}
     <div class="faq-list">
       <div class="faq reveal delay-1"><h3>Сколько стоит?</h3><p>Бот записи от 15 000 руб., бот поддержки от 20 000 руб., бот для канала от 25 000 руб., магазин от 30 000 руб. Точную цену называю после разбора задачи.</p></div>
       <div class="faq reveal delay-2"><h3>Цена меняется в процессе?</h3><p>Нет. Фиксирую сумму до старта — в переписке или в ТЗ. Изменения возможны только если вы просите добавить новый функционал сверх ТЗ.</p></div>
-      <div class="faq reveal delay-3"><h3>На чём пишете?</h3><p>Python + Aiogram. Надёжный стек, под которым работают тысячи ботов. Код читаемый — любой Python-разработчик разберётся.</p></div>
       <div class="faq reveal"><h3>Где будет работать бот?</h3><p>На сервере VPS (300–700 руб./мес.) или на Render (бесплатно для старта). Помогу настроить или размещу сам.</p></div>
       <div class="faq reveal delay-1"><h3>Что если бот сломается?</h3><p>14 дней гарантии — баги по ТЗ исправляю бесплатно. После — по договорённости.</p></div>
       <div class="faq reveal delay-2"><h3>Как оплатить?</h3><p>50% до старта, 50% после демо. Работаю через Kwork/FL.ru (деньги замораживает сервис), или по этапам для крупных проектов.</p></div>
@@ -321,6 +353,43 @@ document.querySelectorAll('.reveal').forEach(function(el){
   var r=el.getBoundingClientRect();
   if(r.top<window.innerHeight)el.classList.add('visible');
 });
+// Reviews
+function escH(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function starsHtml(n){return '★'.repeat(n)+'☆'.repeat(5-n);}
+function loadRv(){
+  var list=JSON.parse(localStorage.getItem('atelier_rv')||'[]');
+  var grid=document.querySelector('.reviews-grid');
+  if(!grid)return;
+  grid.querySelectorAll('.dyn-rv').forEach(function(e){e.remove();});
+  list.forEach(function(r,i){
+    var d=document.createElement('div');
+    d.className='review dyn-rv visible';
+    var delay=i<4?'transition-delay:'+(i*0.1)+'s':'';
+    d.setAttribute('style',delay);
+    d.innerHTML='<div class="review-head"><div class="ava">'+escH(r.name[0].toUpperCase())+'</div>'
+      +'<div class="review-meta"><strong>'+escH(r.name)+'</strong><span>'+escH(r.desc)+'</span></div></div>'
+      +'<div class="stars">'+starsHtml(r.stars)+'</div><p>«'+escH(r.text)+'»</p>';
+    grid.appendChild(d);
+  });
+}
+function submitRv(e){
+  e.preventDefault();
+  var name=document.getElementById('rvName').value.trim();
+  var desc=document.getElementById('rvDesc').value.trim()||'Клиент';
+  var stars=parseInt(document.getElementById('rvStars').value);
+  var text=document.getElementById('rvText').value.trim();
+  if(!name||!text)return;
+  var list=JSON.parse(localStorage.getItem('atelier_rv')||'[]');
+  list.unshift({name:name,desc:desc,stars:stars,text:text});
+  localStorage.setItem('atelier_rv',JSON.stringify(list));
+  document.getElementById('rvForm').reset();
+  var t=document.getElementById('rvThanks');
+  t.style.display='block';
+  setTimeout(function(){t.style.display='none';},3500);
+  loadRv();
+}
+document.addEventListener('DOMContentLoaded',loadRv);
+
 </script>
 </body>
 </html>
